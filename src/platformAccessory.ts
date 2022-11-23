@@ -20,17 +20,17 @@ export class WyzeThermostatAccessory {
   private stateHeat = this.platform.Characteristic.TargetHeatingCoolingState.HEAT;
   private stateAuto = this.platform.Characteristic.TargetHeatingCoolingState.AUTO;
 
-  private currentHeatingCoolingState;
-  private targetHeatingCoolingState;
+  private currentHeatingCoolingState = this.stateOff;
+  private targetHeatingCoolingState = this.stateOff;
 
-  private currentTemperature;
-  private targetCurrentTemperature;
+  private currentTemperature = -1.0;
+  private targetCurrentTemperature = -1.0;
 
-  private targetCoolingThreshold;
-  private targetHeatingThreshold;
+  private targetCoolingThreshold = -1.0;
+  private targetHeatingThreshold = -1.0;
 
-  private currentCoolingThreshold;
-  private currentHeatingThreshold;
+  private currentCoolingThreshold = -1.0;
+  private currentHeatingThreshold = -1.0;
 
   private currentTempUnit = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
   private targetTempUnits = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
@@ -86,6 +86,10 @@ export class WyzeThermostatAccessory {
       .onGet(this.handleTemperatureDisplayUnitsGet.bind(this))
       .onSet(this.handleTemperatureDisplayUnitsSet.bind(this));
   }
+
+
+
+
 
   /*
    * Handle "SET" requests from HomeKit
@@ -156,6 +160,7 @@ export class WyzeThermostatAccessory {
       py_prog = 'setThermostatTargetHeatingTemp';
     }
 
+    // eslint-disable-next-line max-len
     exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetCurrentTemperature}'`,
       (error, stdout, stderr) => {
         if (error) {
@@ -169,6 +174,7 @@ export class WyzeThermostatAccessory {
         }
 
         this.currentTemperature = this.targetCurrentTemperature;
+        // eslint-disable-next-line max-len
         this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic TargetTemp -> '${this.targetCurrentTemperature}'`);
 
       });
@@ -186,6 +192,7 @@ export class WyzeThermostatAccessory {
     // check for current state to set temp correctly
     const py_prog = 'setThermostatTargetCoolingTemp';
 
+    // eslint-disable-next-line max-len
     exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetCoolingThreshold}'`,
       (error, stdout, stderr) => {
         if (error) {
@@ -199,6 +206,7 @@ export class WyzeThermostatAccessory {
         }
 
         this.currentCoolingThreshold = this.targetCoolingThreshold;
+        // eslint-disable-next-line max-len
         this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic Cooling Threshold -> '${this.targetCoolingThreshold}'`);
 
       });
@@ -216,6 +224,7 @@ export class WyzeThermostatAccessory {
     // check for current state to set temp correctly
     const py_prog = 'setThermostatTargetHeatingTemp';
 
+    // eslint-disable-next-line max-len
     exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetHeatingThreshold}'`,
       (error, stdout, stderr) => {
         if (error) {
@@ -229,6 +238,7 @@ export class WyzeThermostatAccessory {
         }
 
         this.currentHeatingThreshold = this.targetHeatingThreshold;
+        // eslint-disable-next-line max-len
         this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic Heating Threshold -> '${this.currentHeatingThreshold}'`);
 
       });
@@ -248,52 +258,56 @@ export class WyzeThermostatAccessory {
 
   }
 
-
-
   // -----------------------------------------------------------------------------------
-
 
   /**
    * Handle the "GET" requests from HomeKit
    * These are sent when HomeKit wants to know the current state of the accessory, for example, checking if a Light bulb is on.
    */
   async handleCurrentHeatingCoolingStateGet(): Promise<CharacteristicValue> {
+    // eslint-disable-next-line max-len
     this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic CurrentHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
 
     return this.currentHeatingCoolingState;
   }
 
   async handleTargetHeatingCoolingStateGet(): Promise<CharacteristicValue> {
+    // eslint-disable-next-line max-len
     this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.targetHeatingCoolingState}`);
 
     return this.targetHeatingCoolingState;
   }
 
   async handleCurrentTemperatureGet(): Promise<CharacteristicValue> {
+    // eslint-disable-next-line max-len
     this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Current Temp -> ${this.currentTemperature}`);
 
     return this.currentTemperature;
   }
 
   async handleTargetTemperatureGet(): Promise<CharacteristicValue> {
+    // eslint-disable-next-line max-len
     this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
 
     return this.targetCurrentTemperature;
   }
 
   async handleTemperatureDisplayUnitsGet(): Promise<CharacteristicValue> {
+    // eslint-disable-next-line max-len
     this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Temp Display Units -> ${this.targetCurrentTemperature}`);
 
     return this.currentTempUnit;
   }
 
   async handleCoolingThresholdTemperatureGet(): Promise<CharacteristicValue> {
+    // eslint-disable-next-line max-len
     this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Cooling Threshold -> ${this.currentCoolingThreshold}`);
 
     return this.currentCoolingThreshold;
   }
 
   async handleHeatingThresholdTemperatureGet(): Promise<CharacteristicValue> {
+    // eslint-disable-next-line max-len
     this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Cooling Threshold -> ${this.currentHeatingThreshold}`);
 
     return this.currentHeatingThreshold;
