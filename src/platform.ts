@@ -29,7 +29,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   ) {
     // Validate configuration
     if ( this.config.name === undefined || this.config.username === undefined || this.config.password === undefined ) {
-      log.error('INVALID CONFIGURATION FOR PLUGIN: homebridge-wyze-robovac');
+      log.error('INVALID CONFIGURATION FOR PLUGIN: homebridge-wyze-suite');
       log.error('name, username and/or password not set. Plugin not started.');
       return;
     }
@@ -81,7 +81,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
           line = line.concat( stdout.charAt(i) );
         }
 
-        // loop over the discovered devices and find the rooms for each vacuum
+        // loop over the discovered devices and generate accessories for each thermostat
         for (const nickName of nickNames) {
           this.generateThermostat( nickName );
         }

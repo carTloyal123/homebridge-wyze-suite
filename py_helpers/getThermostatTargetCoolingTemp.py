@@ -1,7 +1,5 @@
 import os
 import sys
-import logging
-import wyze_sdk
 from wyze_sdk import Client
 from wyze_sdk.errors import WyzeApiError
 
@@ -28,14 +26,14 @@ if device_mac == "Not_Set":
 
 try:
   thermostat_ = client.thermostats.info(device_mac=device_mac)
-  thermostat_.mod
+
   from wyze_sdk.models.devices import ThermostatSystemMode
   
-  print(f"{thermostat_.system_mode}")
+  print(f"{thermostat_.cooling_setpoint}")
 
   quit(0)
 
 except WyzeApiError as e:
     # You will get a WyzeApiError is the request failed
     sys.stdout = sys.stderr
-    print(f"Got an error: {e}")
+    print(f"Got an error getting current temperature: {e}")
