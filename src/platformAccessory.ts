@@ -1,9 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable max-len */
-import { Service, PlatformAccessory, CharacteristicValue, Characteristic } from 'homebridge';
+import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 import { WyzeSuitePlatform } from './platform';
-
-const sleep1 = t => new Promise(s => setTimeout(s, (t * 1000)));
 
 /* eslint-disable */
 const { exec } = require('child_process');
@@ -109,7 +107,7 @@ export class WyzeThermostatAccessory {
 
     // run script to set system state in python
     // eslint-disable-next-line max-len
-    exec(`python3 ${this.p2stubs}/setThermostatSystemState.py ${this.username} ${this.platform.config.password} '${this.deviceNickname}' '${this.targetHeatingCoolingState}'`,
+    exec(`python3 ${this.p2stubs}/setThermostatSystemState.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetHeatingCoolingState}'`,
       (error, stdout, stderr) => {
         if (error) {
           this.platform.log.info(`error: ${error.message}`);
@@ -158,7 +156,7 @@ export class WyzeThermostatAccessory {
       py_prog = 'setThermostatTargetHeatingTemp';
     }
 
-    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} ${this.platform.config.password} '${this.deviceNickname}' '${this.targetCurrentTemperature}'`,
+    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetCurrentTemperature}'`,
       (error, stdout, stderr) => {
         if (error) {
           this.platform.log.info(`error: ${error.message}`);
@@ -188,7 +186,7 @@ export class WyzeThermostatAccessory {
     // check for current state to set temp correctly
     const py_prog = 'setThermostatTargetCoolingTemp';
 
-    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} ${this.platform.config.password} '${this.deviceNickname}' '${this.targetCoolingThreshold}'`,
+    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetCoolingThreshold}'`,
       (error, stdout, stderr) => {
         if (error) {
           this.platform.log.info(`error: ${error.message}`);
@@ -218,7 +216,7 @@ export class WyzeThermostatAccessory {
     // check for current state to set temp correctly
     const py_prog = 'setThermostatTargetHeatingTemp';
 
-    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} ${this.platform.config.password} '${this.deviceNickname}' '${this.targetHeatingThreshold}'`,
+    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetHeatingThreshold}'`,
       (error, stdout, stderr) => {
         if (error) {
           this.platform.log.info(`error: ${error.message}`);
@@ -245,9 +243,6 @@ export class WyzeThermostatAccessory {
       this.myLogger('System units already match!');
       return;
     }
-
-    // check for current state to set temp correctly
-    const py_prog = 'setThermostatTempUnits';
 
     // might need to do some conversion math here or set up F to C conversion and vice versa?
 
