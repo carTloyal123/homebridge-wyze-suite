@@ -28,7 +28,6 @@ if device_mac == "Not_Set":
 
 try:
   thermostat_ = client.thermostats.info(device_mac=device_mac)
-  thermostat_.mod
   from wyze_sdk.models.devices import ThermostatSystemMode
   
   print(f"{thermostat_.system_mode}")
