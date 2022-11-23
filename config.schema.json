@@ -1,16 +1,81 @@
 {
-  "pluginAlias": "ExampleHomebridgePlugin",
+  "pluginAlias": "WyzeSuite",
   "pluginType": "platform",
   "singular": true,
   "schema": {
     "type": "object",
     "properties": {
       "name": {
-        "title": "Name",
+        "title": "WyzeRoboVac",
+        "description": "This name will appear in your Homebridge log",
         "type": "string",
-        "required": true,
-        "default": "Example Dynamic Platform"
+        "default": "WyzeRoboVac",
+        "required": true
+      },
+      "username": {
+        "title": "Username (E-Mail Address)",
+        "description": "The e-mail address used for your Wyze account",
+        "type": "string",
+        "default": "",
+        "required": true
+      },
+      "password": {
+        "title": "Password",
+        "description": "The password used for your Wyze account",
+        "type": "string",
+        "default": "",
+        "required": true
+      },
+      "mfaCode": {
+        "title": "One-time Password (for two-factor authentication)",
+        "description": "Only required for initial login if you have two-factor authentication enabled on your Wyze account",
+        "type": "string",
+        "default": "",
+        "required": false
+      },
+      "statusCheckRefreshInterval": {
+        "title": "Status Check Refresh Interval",
+        "description": "Specify the number of seconds to wait between status checks when the vacuum is sweeping. Default is 30 seconds. Minimum is 10 seconds",
+        "type": "integer",
+        "default": 30,
+        "required": false,
+        "minimum": 10
+      },
+      "idleBatteryCheckRefreshInterval": {
+        "title": "Idle Battery Check Refresh Interval",
+        "description": "Specify the number of seconds to wait between battery checks when the vacuum is idle and at 100% charge. Default is 1800 seconds (30 min). Minimum is 300 seconds (5 min). Maxumum is 3600 (1 hr).",
+        "type": "integer",
+        "default": 1800,
+        "required": false,
+        "minimum": 300,
+        "maximum": 3600
+      },
+      "busyBatteryCheckRefreshInterval": {
+        "title": "Busy Battery Check Refresh Interval",
+        "description": "Specify the number of seconds to wait between battery checks when the vacuum is sweeping or at less than 100% charge. Default is 120 seconds (2 min). Minimum is 60 seconds (1 min)",
+        "type": "integer",
+        "default": 120,
+        "required": false,
+        "minimum": 60
+      },
+      "path2py_stubs": {
+        "title": "Path to Python helper scripts",
+        "description": "The location where the Python helper scripts are installed",
+        "type": "string",
+        "default": "/usr/lib/node_modules/homebridge-wyze-robovac/py_helpers",
+        "required": true
+      },
+      "debugLevel": {
+        "title": "Debug Level",
+        "description": "Specify the Debug Level. 0 ==> no debug output, 1 ==> debug output to Homebridge logfile, 2 ==> system level logging",
+        "type": "integer",
+        "default": 0,
+        "required": false,
+        "minimum": 0,
+        "maximum": 2
       }
     }
-  }
+  },
+  "form": null,
+  "display": null
 }
