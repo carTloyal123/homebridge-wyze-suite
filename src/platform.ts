@@ -22,6 +22,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = [];
 
+  private retryCount = 0;
+
   constructor(
     public readonly log: Logger,
     public readonly config: PlatformConfig,
@@ -59,6 +61,13 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
       (error, stdout, stderr) => {
         if (error) {
           this.log.info(`error: ${error.message}`);
+
+          // wait and retry if possible?
+          setTimeout(() => {
+            this.log.info('Could not connect, retrying in 2000ms!');
+            this.discoverDevices();
+          }, 2000);
+
           return;
         }
         if (stderr) {
