@@ -398,7 +398,7 @@ export class WyzeThermostatAccessory {
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
         this.currentHeatingThreshold = this.far2Cel(parseFloat(currentTempStr));
-        this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(this.currentHeatingThreshold);
+        this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature).updateValue(this.currentHeatingThreshold);
       });
 
     // eslint-disable-next-line max-len

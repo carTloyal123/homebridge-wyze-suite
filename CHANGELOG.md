@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.6.6] - 2022-11-25
+
+### Changed
+
+- Fixed getter for currentHeatingCoolingStateGet to use local enum instead of HAP enum class
+
+## [0.6.4] - 2022-11-24
+
+### Changed
+
+- Fixed getters for characteristics to actually get data from Wyze
+- Fixed Fahrenheit to Celsius conversion where needed to avoid weird data over 100 degrees
+- Added logic to get current heating cooling state based on 
+
 ## [0.5.0] - 2022-11-23
 
 ### Changed
