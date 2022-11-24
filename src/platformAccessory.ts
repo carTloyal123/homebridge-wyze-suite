@@ -275,7 +275,7 @@ export class WyzeThermostatAccessory {
         this.currentStatus = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
         this.currentHeatingCoolingState = this.platform.Characteristic.TargetHeatingCoolingState[this.currentStatus.split('.')[1]];
 
-        if (this.currentHeatingCoolingState > 3) {
+        if (this.currentHeatingCoolingState > 2) {
           if (this.currentTemperature > this.targetCoolingThreshold) {
             wyzeState = this.platform.Characteristic.CurrentHeatingCoolingState.COOL;
           }
