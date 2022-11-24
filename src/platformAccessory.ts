@@ -407,6 +407,10 @@ export class WyzeThermostatAccessory {
     return this.currentHeatingThreshold;
   }
 
+  farToCel(input: number): number {
+    return (input - 32.0)*(5/9);
+  }
+
   myLogger( line ) {
     switch( this.platform.config.debugLevel ) {
       case 0:   // No logging
