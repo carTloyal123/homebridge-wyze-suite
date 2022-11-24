@@ -260,7 +260,6 @@ export class WyzeThermostatAccessory {
 
     let wyzeState = this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
 
-    // run script to GET system state in python
     // eslint-disable-next-line max-len
     exec(`python3 ${this.p2stubs}/getThermostatSystemState.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}'`,
       (error, stdout, stderr) => {
@@ -269,11 +268,11 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          //           this.platform.log.info(`stderr: ${stderr}`);
+          // this.platform.log.info(`stderr: ${stderr}`);
         }
 
         this.currentStatus = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
-        this.currentHeatingCoolingState = this.platform.Characteristic.TargetHeatingCoolingState[this.currentStatus.split('.')[1]];
+        this.currentHeatingCoolingState = Wyze2HomekitStates[this.currentStatus.split('.')[1]];
 
         if (this.currentHeatingCoolingState > 2) {
           if (this.currentTemperature > this.targetCoolingThreshold) {
@@ -415,7 +414,6 @@ export class WyzeThermostatAccessory {
     return ((input * (9/5)) + 32);
   }
 
-
   myLogger( line ) {
     switch( this.platform.config.debugLevel ) {
       case 0:   // No logging
@@ -430,4 +428,12 @@ export class WyzeThermostatAccessory {
       default:
     }
   }
+}
+
+
+export enum Wyze2HomekitStates {
+  OFF,
+  HEAT,
+  COOL,
+  AUTO
 }
