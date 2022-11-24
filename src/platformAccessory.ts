@@ -352,7 +352,7 @@ export class WyzeThermostatAccessory {
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
-        this.currentTempUnit = this.far2Cel(parseInt(currentTempStr));
+        this.currentTempUnit = parseInt(currentTempStr);
         this.service.getCharacteristic(this.platform.Characteristic.TemperatureDisplayUnits).updateValue(this.currentTempUnit);
       });
 
