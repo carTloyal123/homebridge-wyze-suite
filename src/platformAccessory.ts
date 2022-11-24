@@ -115,8 +115,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
-          return;
+          //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         this.currentStatus = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
@@ -165,8 +164,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
-          return;
+          // //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         this.currentTemperature = this.targetCurrentTemperature;
@@ -197,8 +195,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
-          return;
+          //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         this.currentCoolingThreshold = this.targetCoolingThreshold;
@@ -229,8 +226,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
-          return;
+          //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         this.currentHeatingThreshold = this.targetHeatingThreshold;
@@ -273,7 +269,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
+          //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         this.currentStatus = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
@@ -315,7 +311,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
+          //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
@@ -352,7 +348,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
+          //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
@@ -374,7 +370,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
+          //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
@@ -398,7 +394,7 @@ export class WyzeThermostatAccessory {
           return;
         }
         if (stderr) {
-          this.platform.log.info(`stderr: ${stderr}`);
+          //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
