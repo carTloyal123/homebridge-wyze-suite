@@ -315,7 +315,7 @@ export class WyzeThermostatAccessory {
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
-        this.currentTemperature = parseFloat(currentTempStr);
+        this.currentTemperature = this.far2Cel(parseFloat(currentTempStr));
         this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature).updateValue(this.currentTemperature);
       });
 
@@ -352,7 +352,7 @@ export class WyzeThermostatAccessory {
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
-        this.currentTempUnit = parseInt(currentTempStr);
+        this.currentTempUnit = this.far2Cel(parseInt(currentTempStr));
         this.service.getCharacteristic(this.platform.Characteristic.TemperatureDisplayUnits).updateValue(this.currentTempUnit);
       });
 
@@ -374,7 +374,7 @@ export class WyzeThermostatAccessory {
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
-        this.currentCoolingThreshold = parseFloat(currentTempStr);
+        this.currentCoolingThreshold = this.far2Cel(parseFloat(currentTempStr));
         this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(this.currentCoolingThreshold);
       });
 
@@ -398,7 +398,7 @@ export class WyzeThermostatAccessory {
         }
 
         const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
-        this.currentHeatingThreshold = parseFloat(currentTempStr);
+        this.currentHeatingThreshold = this.far2Cel(parseFloat(currentTempStr));
         this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(this.currentHeatingThreshold);
       });
 
@@ -407,9 +407,14 @@ export class WyzeThermostatAccessory {
     return this.currentHeatingThreshold;
   }
 
-  farToCel(input: number): number {
-    return (input - 32.0)*(5/9);
+  far2Cel(input: number): number {
+    return ((input - 32.0)*(5/9));
   }
+
+  cel2Far(input: number): number {
+    return ((input * (9/5)) + 32);
+  }
+
 
   myLogger( line ) {
     switch( this.platform.config.debugLevel ) {
