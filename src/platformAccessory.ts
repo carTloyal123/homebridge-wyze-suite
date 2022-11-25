@@ -32,8 +32,8 @@ export class WyzeThermostatAccessory {
   private currentCoolingThreshold = -1.0;
   private currentHeatingThreshold = -1.0;
 
-  private currentTempUnit = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
-  private targetTempUnits = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
+  private currentTempUnit: number = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
+  private targetTempUnits: number = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
 
   constructor(
     private readonly platform: WyzeSuitePlatform,
@@ -350,8 +350,9 @@ export class WyzeThermostatAccessory {
           //           this.platform.log.info(`stderr: ${stderr}`);
         }
 
-        const currentTempStr = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
-        this.currentTempUnit = parseInt(currentTempStr);
+        // TODO @carTloyal123 PYTHON RETURNS STRING NOT A NUMBER
+        const currentTempStr: string = stdout.slice(0, -1);  // Strip off trailing newline ('\n')
+        this.currentTempUnit = Wyze2HomekitUnits[currentTempStr];
         this.service.getCharacteristic(this.platform.Characteristic.TemperatureDisplayUnits).updateValue(this.currentTempUnit);
       });
 
@@ -436,4 +437,8 @@ export enum Wyze2HomekitStates {
   HEAT,
   COOL,
   AUTO
+}
+
+export enum Wyze2HomekitUnits {
+  C, F
 }
