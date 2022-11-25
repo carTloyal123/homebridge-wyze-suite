@@ -328,9 +328,9 @@ export class WyzeThermostatAccessory {
     this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
     // do some logic to check for heating or cooling, then return cooling_setpoint or heating_setpoint
     if (this.currentHeatingCoolingState === this.stateCool) {
-      return this.targetCoolingThreshold;
-    } else if (this.currentHeatingCoolingState === this.stateHeat) {
       return this.targetHeatingThreshold;
+    } else if (this.currentHeatingCoolingState === this.stateHeat) {
+      return this.targetCoolingThreshold;
     } else {
       return this.currentTemperature;
     }

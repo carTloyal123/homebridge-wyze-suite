@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.8] - 2022-11-25
+
+### Changed
+
+- Fixed getTargetTemperature by switching heating and cooling threshold return values depending on state
+
+## [0.6.8] - 2022-11-25
+
+### Changed
+
+- Fixed temperature units issue when returning them from wyze. Returns string not number of course
+
 ## [0.6.6] - 2022-11-25
 
 ### Changed
@@ -25,8 +37,8 @@
 
 ### Changed
 
-- Update `levelup` to `~0.9.0` ([**@carTloyal123**](https://github.com/carTloyal123))
+- Update `changelog` to `~0.3.1` ([**@carTloyal123**](https://github.com/carTloyal123))
 
 ## [0.2.0] - 2022-11-23
 
-:seedling: Initial release.
+- Initial public release.
