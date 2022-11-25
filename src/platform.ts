@@ -60,7 +60,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     //
     const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 
-    let pythonOutput;
+    let pythonOutput = '';
     let line = '';
     const unknown = 'Unknown';
 
