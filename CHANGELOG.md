@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.21] - 2022-11-25
+
+### Changed
+
+- Updated lint errors
+
 ## [0.6.19] - 2022-11-25
 
 ### Changed
