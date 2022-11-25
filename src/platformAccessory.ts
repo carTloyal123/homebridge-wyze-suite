@@ -23,14 +23,14 @@ export class WyzeThermostatAccessory {
   private currentHeatingCoolingState = this.platform.Characteristic.CurrentHeatingCoolingState.OFF; // only off, cool, heat
   private targetHeatingCoolingState = this.stateOff; // off, cool, heat, auto
 
-  private currentTemperature = -1.0;
-  private targetCurrentTemperature = -1.0;
+  private currentTemperature = 20.5;
+  private targetCurrentTemperature = 20.5;
 
-  private targetCoolingThreshold = -1.0;
-  private targetHeatingThreshold = -1.0;
+  private targetCoolingThreshold = 20.5;
+  private targetHeatingThreshold = 20.5;
 
-  private currentCoolingThreshold = -1.0;
-  private currentHeatingThreshold = -1.0;
+  private currentCoolingThreshold = 20.5;
+  private currentHeatingThreshold = 20.5;
 
   private currentTempUnit: number = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
   private targetTempUnits: number = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;

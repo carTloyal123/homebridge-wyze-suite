@@ -24,7 +24,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
 
   private retryCount = 0;
   private retryMax = 5;
-  private retryTimeout = 5000;
+  private retryTimeout = 8000;
 
   constructor(
     public readonly log: Logger,
@@ -59,12 +59,14 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     // Make list of nicknames for each thermostat.
     //
     let needToDiscover = true;
+    let inError = true;
     let pythonOutput = '';
 
     while (needToDiscover) {
       this.retryCount++;
       if (this.retryCount > this.retryMax) {
         needToDiscover = false;
+        inError = false;
       }
 
       this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
@@ -72,20 +74,22 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
         (error, stdout, stderr) => {
           if (error) {
             this.log.info(`error: ${error.message}`);
-
-            // wait and retry if possible?
-            setTimeout(() => {
-              this.log.info('Could not connect, retrying in 2000ms!');
-            }, this.retryTimeout);
-
+            inError = true;
             return;
           }
           if (stderr) {
             this.log.info(`stderr: ${stderr}`);
           }
 
+          inError = false;
           pythonOutput = stdout;
         });
+
+      if (inError) {
+        setTimeout(() => {
+          this.log.info('Could not connect, retrying in 2000ms!');
+        }, this.retryTimeout);
+      }
     }
     let line = '';
     needToDiscover = false;

@@ -1,6 +1,14 @@
 # Changelog
 
-## [0.6.8] - 2022-11-25
+## [0.6.12] - 2022-11-25
+
+### Changed
+
+- Fixed retry structure to wait before executing python again
+- Setup to add variables to timeout and retries
+- Corrected temperature target return
+
+## [0.6.10] - 2022-11-25
 
 ### Changed
 
