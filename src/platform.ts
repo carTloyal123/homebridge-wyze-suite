@@ -2,6 +2,7 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { WyzeThermostatAccessory } from './platformAccessory';
+import { deflateSync } from 'zlib';
 
 /* eslint-disable */
 const { exec } = require('child_process');
@@ -58,42 +59,38 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     //
     // Make list of nicknames for each thermostat.
     //
-    let needToDiscover = true;
-    let inError = true;
     let pythonOutput = '';
 
-    while (needToDiscover) {
-      this.retryCount++;
-      if (this.retryCount > this.retryMax) {
-        needToDiscover = false;
-        inError = false;
-      }
+    const intervalId = setInterval(() => {
 
+      // run python to get devices
       this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
       exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
         (error, stdout, stderr) => {
           if (error) {
             this.log.info(`error: ${error.message}`);
-            inError = true;
+
+            // if an error, return the function call and iterate the retry count
+            this.retryCount++;
+            if(this.retryCount === this.retryMax) {
+              clearInterval(intervalId);
+            }
             return;
           }
+
           if (stderr) {
             this.log.info(`stderr: ${stderr}`);
           }
-
-          needToDiscover = false;
-          inError = false;
           pythonOutput = stdout;
+
+          // if no error, clear the interval to exit the set interval
+          clearInterval(intervalId);
         });
 
-      if (inError) {
-        setTimeout(() => {
-          this.log.info('Could not connect, retrying in 2000ms!');
-        }, this.retryTimeout);
-      }
-    }
+
+    }, this.retryTimeout);
+
     let line = '';
-    needToDiscover = false;
     const unknown = 'Unknown';
 
     // Get individual lines of output from stdout

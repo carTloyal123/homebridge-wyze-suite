@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.16] - 2022-11-25
+
+### Changed
+
+- Changed retry logic to use setInterval instead of while loop
+
 ## [0.6.15] - 2022-11-25
 
 ### Changed
