@@ -23,6 +23,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   public readonly accessories: PlatformAccessory[] = [];
 
   private retryCount = 0;
+  private retryMax = 5;
+  private retryTimeout = 5000;
 
   constructor(
     public readonly log: Logger,
@@ -56,45 +58,53 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     //
     // Make list of nicknames for each thermostat.
     //
-    this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
-    exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
-      (error, stdout, stderr) => {
-        if (error) {
-          this.log.info(`error: ${error.message}`);
+    let needToDiscover = true;
 
-          // wait and retry if possible?
-          setTimeout(() => {
-            this.log.info('Could not connect, retrying in 2000ms!');
-            this.discoverDevices();
-          }, 2000);
+    while (needToDiscover) {
+      if (this.retryCount > this.retryMax) {
+        needToDiscover = false;
+      }
+      this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
+      exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
+        (error, stdout, stderr) => {
+          if (error) {
+            this.log.info(`error: ${error.message}`);
 
-          return;
-        }
-        if (stderr) {
-          this.log.info(`stderr: ${stderr}`);
-        }
-        let line = '';
+            // wait and retry if possible?
+            setTimeout(() => {
+              this.log.info('Could not connect, retrying in 2000ms!');
+            }, this.retryTimeout);
 
-        const unknown = 'Unknown';
-
-        // Get individual lines of output from stdout
-        for(let i = 0; i < stdout.length; i++) {
-          const c = stdout.charAt(i);
-          if( c === '\n') {
-            if (!(line.includes(unknown))) {
-              nickNames.push( line );
-            }
-            line = '';
-            continue;
+            return;
           }
-          line = line.concat( stdout.charAt(i) );
-        }
+          if (stderr) {
+            this.log.info(`stderr: ${stderr}`);
+          }
 
-        // loop over the discovered devices and generate accessories for each thermostat
-        for (const nickName of nickNames) {
-          this.generateThermostat( nickName );
-        }
-      });
+          let line = '';
+          needToDiscover = false;
+          const unknown = 'Unknown';
+
+          // Get individual lines of output from stdout
+          for(let i = 0; i < stdout.length; i++) {
+            const c = stdout.charAt(i);
+            if( c === '\n') {
+              if (!(line.includes(unknown))) {
+                nickNames.push( line );
+              }
+              line = '';
+              continue;
+            }
+            line = line.concat( stdout.charAt(i) );
+          }
+
+          // loop over the discovered devices and generate accessories for each thermostat
+          for (const nickName of nickNames) {
+            this.generateThermostat( nickName );
+          }
+        });
+    }
+
   }
 
   // take name and create thermostat device for it
