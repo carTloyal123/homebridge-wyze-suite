@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.15] - 2022-11-25
+
+### Changed
+
+- Added homebridge config option for `deviceDiscoveryTimeout` and `maximumDiscoveryAttempts`
+
 ## [0.6.14] - 2022-11-25
 
 ### Changed

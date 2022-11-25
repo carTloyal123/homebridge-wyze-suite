@@ -23,8 +23,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   public readonly accessories: PlatformAccessory[] = [];
 
   private retryCount = 0;
-  private retryMax = 5;
-  private retryTimeout = 8000;
+  private retryMax = this.config.maximumDiscoveryAttempts;
+  private retryTimeout = this.config.deviceDiscoveryTimeout;
 
   constructor(
     public readonly log: Logger,

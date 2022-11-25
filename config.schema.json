@@ -41,6 +41,24 @@
         "required": false,
         "minimum": 0,
         "maximum": 2
+      },
+      "deviceDiscoveryTimeout": {
+        "title": "Discovery Timeout",
+        "description": "Specify the amount of milliseconds to wait between each device discovery attempt e.g 1000 for 1 second.",
+        "type": "integer",
+        "default": 5000,
+        "required": true,
+        "minimum": 0,
+        "maximum": 30000
+      },
+      "maximumDiscoveryAttempts": {
+        "title": "Maximum Discovery Attempts",
+        "description": "Specify the maximum allowed attempts to discovery Wyze devices before stopping. If tries run out, you will have to restart the plugin.",
+        "type": "integer",
+        "default": 5,
+        "required": true,
+        "minimum": 0,
+        "maximum": 1000
       }
     }
   },
