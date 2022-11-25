@@ -55,7 +55,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     this.accessories.push(accessory);
   }
 
-  discoverDevices() {
+  async discoverDevices() {
     //
     // Make list of nicknames for each thermostat.
     //
@@ -65,7 +65,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     let line = '';
     const unknown = 'Unknown';
 
-    sleep(this.retryTimeout);
+    await sleep(this.retryTimeout);
     // run python to get devices
     this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
     exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
