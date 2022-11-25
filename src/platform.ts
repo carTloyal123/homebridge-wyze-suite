@@ -59,12 +59,14 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     // Make list of nicknames for each thermostat.
     //
     let needToDiscover = true;
+    let pythonOutput = '';
 
     while (needToDiscover) {
       this.retryCount++;
       if (this.retryCount > this.retryMax) {
         needToDiscover = false;
       }
+
       this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
       exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
         (error, stdout, stderr) => {
@@ -82,30 +84,30 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
             this.log.info(`stderr: ${stderr}`);
           }
 
-          let line = '';
-          needToDiscover = false;
-          const unknown = 'Unknown';
-
-          // Get individual lines of output from stdout
-          for(let i = 0; i < stdout.length; i++) {
-            const c = stdout.charAt(i);
-            if( c === '\n') {
-              if (!(line.includes(unknown))) {
-                nickNames.push( line );
-              }
-              line = '';
-              continue;
-            }
-            line = line.concat( stdout.charAt(i) );
-          }
-
-          // loop over the discovered devices and generate accessories for each thermostat
-          for (const nickName of nickNames) {
-            this.generateThermostat( nickName );
-          }
+          pythonOutput = stdout;
         });
     }
+    let line = '';
+    needToDiscover = false;
+    const unknown = 'Unknown';
 
+    // Get individual lines of output from stdout
+    for(let i = 0; i < pythonOutput.length; i++) {
+      const c = pythonOutput.charAt(i);
+      if( c === '\n') {
+        if (!(line.includes(unknown))) {
+          nickNames.push( line );
+        }
+        line = '';
+        continue;
+      }
+      line = line.concat( pythonOutput.charAt(i) );
+    }
+
+    // loop over the discovered devices and generate accessories for each thermostat
+    for (const nickName of nickNames) {
+      this.generateThermostat( nickName );
+    }
   }
 
   // take name and create thermostat device for it
