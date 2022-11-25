@@ -2,6 +2,7 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { WyzeThermostatAccessory } from './platformAccessory';
+import { resolve } from 'path';
 
 /* eslint-disable */
 const { exec } = require('child_process');
@@ -58,11 +59,15 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     //
     // Make list of nicknames for each thermostat.
     //
-    let pythonOutput = '';
+    const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
+
+    let pythonOutput;
     let line = '';
     const unknown = 'Unknown';
-    const intervalId = setInterval(() => {
+    let doDiscover = true;
+    while (doDiscover) {
 
+      sleep(this.retryTimeout);
       // run python to get devices
       this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
       exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
@@ -72,20 +77,17 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
             this.log.info(`error: ${error.message}`);
             this.retryCount++;
             if(this.retryCount === this.retryMax) {
-              clearInterval(intervalId);
+              doDiscover = false;
             }
           } else {
             // if no error, print stderr and steal the stdout for processing
             this.log.info(`stderr: ${stderr}`);
             pythonOutput = stdout;
-
+            doDiscover = false;
             // if no error, clear the interval to exit the set interval
-            clearInterval(intervalId);
           }
         });
-    }, this.retryTimeout);
-
-
+    }
 
     // Get individual lines of output from stdout
     for(let i = 0; i < pythonOutput.length; i++) {
@@ -105,6 +107,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
       this.generateThermostat( nickName );
     }
   }
+
 
   // take name and create thermostat device for it
   generateThermostat(nickName) {
