@@ -64,30 +64,27 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     let pythonOutput;
     let line = '';
     const unknown = 'Unknown';
-    let doDiscover = true;
-    while (doDiscover) {
 
-      sleep(this.retryTimeout);
-      // run python to get devices
-      this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
-      exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
-        (error, stdout, stderr) => {
-          if (error) {
-            // if an error, iterate the retry count, cancel interval if at max tries
-            this.log.info(`error: ${error.message}`);
-            this.retryCount++;
-            if(this.retryCount === this.retryMax) {
-              doDiscover = false;
-            }
-          } else {
-            // if no error, print stderr and steal the stdout for processing
-            this.log.info(`stderr: ${stderr}`);
-            pythonOutput = stdout;
-            doDiscover = false;
-            // if no error, clear the interval to exit the set interval
+    sleep(this.retryTimeout);
+    // run python to get devices
+    this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
+    exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
+      (error, stdout, stderr) => {
+        if (error) {
+          // if an error, iterate the retry count, cancel interval if at max tries
+          this.log.info(`error: ${error.message}`);
+          this.retryCount++;
+          if(this.retryCount === this.retryMax) {
+            this.log.info('Failed to get devices, increasing try count...');
           }
-        });
-    }
+        } else {
+          // if no error, print stderr and steal the stdout for processing
+          this.log.info('Got devices from Python for Wyze!');
+          this.log.info(`stderr: ${stderr}`);
+          pythonOutput = stdout;
+          // if no error, clear the interval to exit the set interval
+        }
+      });
 
     // Get individual lines of output from stdout
     for(let i = 0; i < pythonOutput.length; i++) {

@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.18] - 2022-11-25
+
+### Changed
+
+- Reverted discovery method to single try
+
+## [0.6.18] - 2022-11-25
+
+### Changed
+
+- Retry discovery using promises
+
 ## [0.6.17] - 2022-11-25
 
 ### Changed
