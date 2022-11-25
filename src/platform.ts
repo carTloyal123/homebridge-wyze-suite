@@ -61,6 +61,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     let needToDiscover = true;
 
     while (needToDiscover) {
+      this.retryCount++;
       if (this.retryCount > this.retryMax) {
         needToDiscover = false;
       }

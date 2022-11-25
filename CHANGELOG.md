@@ -4,6 +4,12 @@
 
 ### Changed
 
+- Fixed retry logic for getting devices for the first time to have some parameters and not be infinite
+
+## [0.6.8] - 2022-11-25
+
+### Changed
+
 - Fixed getTargetTemperature by switching heating and cooling threshold return values depending on state
 
 ## [0.6.8] - 2022-11-25
