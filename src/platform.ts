@@ -81,6 +81,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
             this.log.info(`stderr: ${stderr}`);
           }
 
+          needToDiscover = false;
           inError = false;
           pythonOutput = stdout;
         });

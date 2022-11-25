@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.14] - 2022-11-25
+
+### Changed
+
+- Fixed retry process to actually stop if discovery works
+
 ## [0.6.12] - 2022-11-25
 
 ### Changed
