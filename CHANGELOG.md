@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.17] - 2022-11-25
+
+### Changed
+
+- Added real logic to discovery retry
+
 ## [0.6.16] - 2022-11-25
 
 ### Changed

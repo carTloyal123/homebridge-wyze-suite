@@ -2,7 +2,6 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { WyzeThermostatAccessory } from './platformAccessory';
-import { deflateSync } from 'zlib';
 
 /* eslint-disable */
 const { exec } = require('child_process');
@@ -60,7 +59,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     // Make list of nicknames for each thermostat.
     //
     let pythonOutput = '';
-
+    let line = '';
+    const unknown = 'Unknown';
     const intervalId = setInterval(() => {
 
       // run python to get devices
@@ -68,30 +68,24 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
       exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
         (error, stdout, stderr) => {
           if (error) {
+            // if an error, iterate the retry count, cancel interval if at max tries
             this.log.info(`error: ${error.message}`);
-
-            // if an error, return the function call and iterate the retry count
             this.retryCount++;
             if(this.retryCount === this.retryMax) {
               clearInterval(intervalId);
             }
-            return;
-          }
-
-          if (stderr) {
+          } else {
+            // if no error, print stderr and steal the stdout for processing
             this.log.info(`stderr: ${stderr}`);
+            pythonOutput = stdout;
+
+            // if no error, clear the interval to exit the set interval
+            clearInterval(intervalId);
           }
-          pythonOutput = stdout;
-
-          // if no error, clear the interval to exit the set interval
-          clearInterval(intervalId);
         });
-
-
     }, this.retryTimeout);
 
-    let line = '';
-    const unknown = 'Unknown';
+
 
     // Get individual lines of output from stdout
     for(let i = 0; i < pythonOutput.length; i++) {
