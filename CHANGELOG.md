@@ -1,5 +1,11 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.0] - 2022-11-25
+
+### Changed
+
+- Getting of values from Wyze looks good and works as expected so far
+
 ## [0.6.38] - 2022-11-25
 
 ### Changed
