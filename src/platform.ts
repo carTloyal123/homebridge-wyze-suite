@@ -59,7 +59,6 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     let curDate: Date = new Date();
     do {
       curDate = new Date();
-      this.log.info(`Pausing: ${curDate.getTime()} and ${date.getTime()}`);
     }
     while(curDate.getTime() - date.getTime() < millis);
   }
