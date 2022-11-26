@@ -78,8 +78,8 @@ export class WyzeThermostatAccessory {
 
     // Heating setpoint handlers - needed for system in Auto
     this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature)
-      .onGet(this.handleCoolingThresholdTemperatureGet.bind(this))
-      .onSet(this.handleCoolingThresholdTemperatureSet.bind(this));
+      .onGet(this.handleHeatingThresholdTemperatureGet.bind(this))
+      .onSet(this.handleHeatingThresholdTemperatureSet.bind(this));
 
     // Target display unit handlers
     this.service.getCharacteristic(this.platform.Characteristic.TemperatureDisplayUnits)
