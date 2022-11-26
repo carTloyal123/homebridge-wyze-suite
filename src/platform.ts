@@ -59,9 +59,6 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     let curDate: Date = new Date();
     do {
       curDate = new Date();
-      if (curDate.getTime() - date.getTime() % 1000) {
-        this.log.info(`Time Diff: ${curDate.getTime() - date.getTime()}`);
-      }
     }
     while(curDate.getTime() - date.getTime() < millis);
   }
