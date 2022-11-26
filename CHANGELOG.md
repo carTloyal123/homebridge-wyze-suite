@@ -4,6 +4,13 @@
 
 ### Changed
 
+- Fixed timeout issue using computational timer
+- Added more debug messages for devices getting added or not
+
+## [0.6.21] - 2022-11-25
+
+### Changed
+
 - Fixed stdout getting stuck on startup
 
 ## [0.6.21] - 2022-11-25
