@@ -106,6 +106,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
       if( c === '\n') {
         if (!(line.includes(unknown))) {
           nickNames.push( line );
+          this.log.info(`Found new device in Wyze: ${line}`);
         }
         line = '';
         continue;
