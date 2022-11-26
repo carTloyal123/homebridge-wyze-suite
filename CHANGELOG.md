@@ -1,4 +1,10 @@
-# Changelog
+# Changelog - homebridge-wyze-suite
+
+## [0.6.21] - 2022-11-25
+
+### Changed
+
+- Fixed stdout getting stuck on startup
 
 ## [0.6.21] - 2022-11-25
 

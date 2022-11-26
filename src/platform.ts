@@ -79,6 +79,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
         } else {
           // if no error, print stderr and steal the stdout for processing
           this.log.info('Got devices from Python for Wyze!');
+          this.myLogger(stderr);
           pythonOutput = pythonOutput.concat(stdout);
           // if no error, clear the interval to exit the set interva
           this.log.info('Should return control now to continue!');
