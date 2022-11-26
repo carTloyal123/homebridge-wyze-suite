@@ -4,7 +4,7 @@
 
 npm audit
 
-if  true; then
+if  npm run lint; then
   if npm run build; then
     git add .
     npm version patch -m "$1" --force
