@@ -2,7 +2,7 @@
   "private": false,
   "displayName": "Wyze Suite",
   "name": "homebridge-wyze-suite",
-  "version": "0.6.27",
+  "version": "0.6.28",
   "description": "This plugin provides homekit functionality for Wyze devices based on RMCob's work and the wyze-sdk Python library.",
   "license": "Apache-2.0",
   "repository": {

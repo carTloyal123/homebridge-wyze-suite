@@ -59,7 +59,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     let curDate: Date;
     do {
       curDate = new Date();
-      this.log.info(`Pausing: '${curDate.getUTCMilliseconds()}' and '${date.getUTCMilliseconds}'`);
+      this.log.info(`Pausing: ${curDate.getUTCMilliseconds()} and ${date.getUTCMilliseconds()}`);
     }
     while(curDate.getUTCMilliseconds() - date.getUTCMilliseconds() < millis);
   }
