@@ -1,5 +1,11 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.6.38] - 2022-11-25
+
+### Changed
+
+- Fixed wrong callback registered for heating threshold characteristic
+
 ## [0.6.21] - 2022-11-25
 
 ### Changed

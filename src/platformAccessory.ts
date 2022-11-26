@@ -26,11 +26,11 @@ export class WyzeThermostatAccessory {
   private currentTemperature = 20.5;
   private targetCurrentTemperature = 20.5;
 
-  private targetCoolingThreshold = 20.5;
-  private targetHeatingThreshold = 20.5;
+  private targetCoolingThreshold = 21.0;
+  private targetHeatingThreshold = 20.0;
 
-  private currentCoolingThreshold = 20.5;
-  private currentHeatingThreshold = 20.5;
+  private currentCoolingThreshold = 21.0;
+  private currentHeatingThreshold = 20.0;
 
   private currentTempUnit: number = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
   private targetTempUnits: number = this.platform.Characteristic.TemperatureDisplayUnits.FAHRENHEIT;
@@ -125,8 +125,10 @@ export class WyzeThermostatAccessory {
   }
 
   async handleTargetTemperatureSet(value: CharacteristicValue) {
+
     // set target temperature in wyze-sdk
     this.targetCurrentTemperature = value as number;
+    this.myLogger(`Setting Target temperature to: ${this.targetCurrentTemperature}`);
 
     // check if they are already the same for some reason
     if (this.currentTemperature === this.targetCurrentTemperature) {
@@ -178,6 +180,7 @@ export class WyzeThermostatAccessory {
   async handleCoolingThresholdTemperatureSet(value: CharacteristicValue) {
     // set target temperature in wyze-sdk
     this.targetCoolingThreshold = value as number;
+    this.myLogger(`Setting Target Cooling temperature to: ${this.targetCoolingThreshold}`);
 
     if (this.currentHeatingCoolingState !== this.stateAuto) {
       this.myLogger('System currently NOT AUTO, not setting cooling threshold setpoint temp!');
@@ -209,6 +212,7 @@ export class WyzeThermostatAccessory {
   async handleHeatingThresholdTemperatureSet(value: CharacteristicValue) {
     // set target temperature in wyze-sdk
     this.targetHeatingThreshold = value as number;
+    this.myLogger(`Setting Target Heating temperature to: ${this.targetHeatingThreshold}`);
 
     if (this.currentHeatingCoolingState !== this.stateAuto) {
       this.myLogger('System currently NOT AUTO, not setting cooling threshold setpoint temp!');
@@ -240,6 +244,7 @@ export class WyzeThermostatAccessory {
   async handleTemperatureDisplayUnitsSet(value: CharacteristicValue) {
     // set target temperature in wyze-sdk
     this.targetTempUnits = value as number;
+    this.myLogger(`Setting Target Units: ${this.targetTempUnits}`);
 
     if (this.targetTempUnits === this.currentTempUnit) {
       this.myLogger('System units already match!');
