@@ -59,6 +59,9 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     let curDate: Date = new Date();
     do {
       curDate = new Date();
+      if (curDate.getTime() - date.getTime() % 100) {
+        this.log.info(`Time Diff: ${curDate.getTime() - date.getDate()}`);
+      }
     }
     while(curDate.getTime() - date.getTime() < millis);
   }
@@ -87,14 +90,17 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
         } else {
           // if no error, print stderr and steal the stdout for processing
           this.log.info('Got devices from Python for Wyze!');
-          this.myLogger(stderr);
-          pythonOutput = pythonOutput.concat(stdout);
+          this.log.info(stderr);
+          this.log.info('STDOUT ------------------------------------------');
+          this.log.info(stdout);
+          pythonOutput = stdout;
           // if no error, clear the interval to exit the set interva
           this.log.info('Should return control now to continue!');
         }
       });
 
     // Get individual lines of output from stdout
+
     for(let i = 0; i < pythonOutput.length; i++) {
       const c = pythonOutput.charAt(i);
       if( c === '\n') {
@@ -108,6 +114,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     }
 
     // loop over the discovered devices and generate accessories for each thermostat
+    this.log.info(`Generating devices from Wyze Suite: ${nickNames.length}`);
     for (const nickName of nickNames) {
       this.generateThermostat( nickName );
     }
