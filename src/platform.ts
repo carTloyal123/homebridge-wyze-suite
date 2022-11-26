@@ -60,7 +60,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     do {
       curDate = new Date();
     }
-    while(curDate.getMilliseconds() - date.getMilliseconds() < millis);
+    while(curDate.getUTCMilliseconds() - date.getUTCMilliseconds() < millis);
   }
 
   discoverDevices() {
