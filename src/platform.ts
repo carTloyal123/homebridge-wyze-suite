@@ -56,7 +56,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
 
   pausecomp(millis) {
     const date: Date = new Date();
-    let curDate: Date;
+    let curDate: Date = new Date();
     do {
       curDate = new Date();
       this.log.info(`Pausing: ${curDate.getUTCMilliseconds()} and ${date.getUTCMilliseconds()}`);
