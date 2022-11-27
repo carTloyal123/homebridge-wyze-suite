@@ -1,7 +1,7 @@
 # Changelog - homebridge-wyze-suite
 
 
-## [0.7.1] - 2022-11-25
+## [0.7.2] - 2022-11-25
 
 ### Changed
 

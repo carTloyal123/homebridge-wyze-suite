@@ -131,10 +131,10 @@ export class WyzeThermostatAccessory {
     this.targetHeatingCoolingState = value as number;
     // value can be heat, cool, off
     this.accLogName = `'${this.accessory.displayName}'(${this.deviceNickname})`;
-    this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic On -> '${this.isOn}'`);
+    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic On -> '${this.isOn}'`);
 
     if (value === this.currentHeatingCoolingState) {
-      this.myLogger('System state already set!');
+      this.platform.log.info('System state already set!');
       return;
     }
 
@@ -161,21 +161,21 @@ export class WyzeThermostatAccessory {
 
     // set target temperature in wyze-sdk
     this.targetCurrentTemperature = value as number;
-    this.myLogger(`Setting Target temperature to: ${this.targetCurrentTemperature}`);
+    this.platform.log.info(`Setting Target temperature to: ${this.targetCurrentTemperature}`);
 
     // check if they are already the same for some reason
     if (this.currentTemperature === this.targetCurrentTemperature) {
-      this.myLogger('System current temperature already set!');
+      this.platform.log.info('System current temperature already set!');
       return;
     }
 
     if (this.currentHeatingCoolingState === this.stateOff) {
-      this.myLogger('System currently OFF, not setting temp!');
+      this.platform.log.info('System currently OFF, not setting temp!');
       return;
     }
 
     if (this.currentWyzeHeatingCoolingState === this.stateAuto) {
-      this.myLogger('System currently AUTO, not setting single setpoint temp!');
+      this.platform.log.info('System currently AUTO, not setting single setpoint temp!');
       return;
     }
 
@@ -204,7 +204,7 @@ export class WyzeThermostatAccessory {
 
         this.currentTemperature = this.targetCurrentTemperature;
         // eslint-disable-next-line max-len
-        this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic TargetTemp -> '${this.targetCurrentTemperature}'`);
+        this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic TargetTemp -> '${this.targetCurrentTemperature}'`);
 
       });
 
@@ -213,10 +213,10 @@ export class WyzeThermostatAccessory {
   async handleCoolingThresholdTemperatureSet(value: CharacteristicValue) {
     // set target temperature in wyze-sdk
     this.targetCoolingThreshold = value as number;
-    this.myLogger(`Setting Target Cooling temperature to: ${this.targetCoolingThreshold}`);
+    this.platform.log.info(`Setting Target Cooling temperature to: ${this.targetCoolingThreshold}`);
 
     if (this.currentWyzeHeatingCoolingState !== this.stateAuto) {
-      this.myLogger('System currently NOT AUTO, not setting cooling threshold setpoint temp!');
+      this.platform.log.info('System currently NOT AUTO, not setting cooling threshold setpoint temp!');
       return;
     }
     // check for current state to set temp correctly
@@ -236,7 +236,7 @@ export class WyzeThermostatAccessory {
 
         this.currentCoolingThreshold = this.targetCoolingThreshold;
         // eslint-disable-next-line max-len
-        this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic Cooling Threshold -> '${this.targetCoolingThreshold}'`);
+        this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic Cooling Threshold -> '${this.targetCoolingThreshold}'`);
 
       });
 
@@ -245,10 +245,10 @@ export class WyzeThermostatAccessory {
   async handleHeatingThresholdTemperatureSet(value: CharacteristicValue) {
     // set target temperature in wyze-sdk
     this.targetHeatingThreshold = value as number;
-    this.myLogger(`Setting Target Heating temperature to: ${this.targetHeatingThreshold}`);
+    this.platform.log.info(`Setting Target Heating temperature to: ${this.targetHeatingThreshold}`);
 
     if (this.currentWyzeHeatingCoolingState !== this.stateAuto) {
-      this.myLogger('System currently NOT AUTO, not setting Heating threshold setpoint temp!');
+      this.platform.log.info('System currently NOT AUTO, not setting Heating threshold setpoint temp!');
       return;
     }
     // check for current state to set temp correctly
@@ -268,7 +268,7 @@ export class WyzeThermostatAccessory {
 
         this.currentHeatingThreshold = this.targetHeatingThreshold;
         // eslint-disable-next-line max-len
-        this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic Heating Threshold -> '${this.currentHeatingThreshold}'`);
+        this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Set Characteristic Heating Threshold -> '${this.currentHeatingThreshold}'`);
 
       });
 
@@ -277,10 +277,10 @@ export class WyzeThermostatAccessory {
   async handleTemperatureDisplayUnitsSet(value: CharacteristicValue) {
     // set target temperature in wyze-sdk
     this.targetTempUnits = value as number;
-    this.myLogger(`Setting Target Units: ${this.targetTempUnits}`);
+    this.platform.log.info(`Setting Target Units: ${this.targetTempUnits}`);
 
     if (this.targetTempUnits === this.currentTempUnit) {
-      this.myLogger('System units already match!');
+      this.platform.log.info('System units already match!');
       return;
     }
 
@@ -316,14 +316,14 @@ export class WyzeThermostatAccessory {
     this.service.getCharacteristic(this.platform.Characteristic.CurrentHeatingCoolingState).updateValue(homekitState);
 
     // eslint-disable-next-line max-len
-    this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic CurrentHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
+    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic CurrentHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
     this.currentHeatingCoolingState = homekitState;
     return this.currentHeatingCoolingState;
   }
 
   async handleTargetHeatingCoolingStateGet(): Promise<CharacteristicValue> {
     // eslint-disable-next-line max-len
-    this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
+    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
 
     return this.currentHeatingCoolingState;
   }
@@ -334,13 +334,13 @@ export class WyzeThermostatAccessory {
     this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature).updateValue(this.currentTemperature);
 
     // eslint-disable-next-line max-len
-    this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic CurrentTemperature -> ${this.currentTemperature}`);
+    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic CurrentTemperature -> ${this.currentTemperature}`);
     return this.currentTemperature;
   }
 
   async handleTargetTemperatureGet(): Promise<CharacteristicValue> {
     // eslint-disable-next-line max-len
-    this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
+    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
     // do some logic to check for heating or cooling, then return cooling_setpoint or heating_setpoint
     if (this.currentHeatingCoolingState === this.stateCool) {
       return this.targetHeatingThreshold;
@@ -363,7 +363,7 @@ export class WyzeThermostatAccessory {
     this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(this.currentCoolingThreshold);
 
     // eslint-disable-next-line max-len
-    this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Cooling Threshold -> ${this.currentCoolingThreshold}`);
+    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Cooling Threshold -> ${this.currentCoolingThreshold}`);
     return this.currentCoolingThreshold;
   }
 
@@ -372,7 +372,7 @@ export class WyzeThermostatAccessory {
     this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature).updateValue(this.currentHeatingThreshold);
 
     // eslint-disable-next-line max-len
-    this.myLogger(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Current Heating Threshold -> ${this.currentHeatingThreshold}`);
+    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic Current Heating Threshold -> ${this.currentHeatingThreshold}`);
     return this.currentHeatingThreshold;
   }
 
@@ -401,13 +401,13 @@ export class WyzeThermostatAccessory {
         const pythonJson: PythonWyzeStates = message;
         this.currentTemperature = this.far2Cel(pythonJson.temperature);
         this.currentWyzeHeatingCoolingState = Wyze2HomekitStates[pythonJson.system_mode];
+        this.platform.log.info(`Current Wyze State: ${this.currentWyzeHeatingCoolingState}`);
         this.currentCoolingThreshold = this.far2Cel(pythonJson.cooling_setpoint);
         this.currentHeatingThreshold = this.far2Cel(pythonJson.heating_setpoint);
         this.currentTempUnit = Wyze2HomekitUnits[pythonJson.temperature_unit];
         this.lastWyzeUpdate = new Date();
         this.platform.log.info('Updated Wyze states from Python!!');
         this.wyzeDataUpdated = true;
-
       } catch {
         this.platform.log.info('Unable to parse variables from python! :(');
         this.wyzeDataUpdated = false;
@@ -466,6 +466,15 @@ export class WyzeThermostatAccessory {
         break;
       default:
     }
+  }
+
+  pausecomp(millis) {
+    const date: Date = new Date();
+    let curDate: Date = new Date();
+    do {
+      curDate = new Date();
+    }
+    while(curDate.getTime() - date.getTime() < millis);
   }
 }
 
