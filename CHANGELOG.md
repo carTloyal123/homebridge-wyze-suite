@@ -1,5 +1,19 @@
 # Changelog - homebridge-wyze-suite
 
+
+## [0.7.1] - 2022-11-25
+
+### Changed
+
+- Thermostat refreshes device states according to config param
+- Only runs python scripts in refresh time rather than every time get is called
+
+## [0.7.1] - 2022-11-25
+
+### Changed
+
+- Changed get structure to refresh on an interval and populate homekit requests with previous value instead of python calls every get request
+
 ## [0.7.0] - 2022-11-25
 
 ### Changed
