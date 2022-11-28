@@ -4,6 +4,12 @@
 
 ### Changed
 
+- Refactor device discovery setTimeout to be able to use 'this'
+
+## [0.7.6] - 2022-11-28
+
+### Changed
+
 - Updated setters to update characteristics if set is successful
 - Actually added processGetUpdate to getters to check data status each time
 

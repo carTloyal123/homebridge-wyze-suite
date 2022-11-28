@@ -29,6 +29,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   private retryTimeout = this.config.deviceDiscoveryTimeout;
   private p2stubs = this.config.path2py_stubs;
   private wyzeDevicesUpdated = false;
+  private retryTimer;
 
 
   constructor(
@@ -66,29 +67,6 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
       curDate = new Date();
     }
     while(curDate.getTime() - date.getTime() < millis);
-  }
-
-  discoverDevices() {
-    //
-    // Make list of nicknames for each thermostat.
-    //
-
-    this.pausecomp(this.retryTimeout);
-    // run python to get devices
-    this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
-
-    this.handleGetDevicesFromWyze();
-
-    let retryTimer = setTimeout(function timeoutFunction(this) {
-      if (!this.wyzeDevicesUpdated ) {
-        this.handleGetDevicesFromWyze();
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        retryTimer = setTimeout(timeoutFunction, this.retryTimeout);
-      } else {
-        this.log.info('Not running device discovery anymore!');
-      }
-    }, this.retryTimeout);
   }
 
   handleGetDevicesFromWyze(pythonScriptName = 'getThermostatDeviceList') {
@@ -141,6 +119,30 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
 
   }
 
+  discoverDevices() {
+    //
+    // Make list of nicknames for each thermostat.
+    //
+
+    this.pausecomp(this.retryTimeout);
+    // run python to get devices
+    this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
+
+    this.handleGetDevicesFromWyze();
+
+    this.retryTimer = setTimeout(this.retryCallback.bind(this), this.retryTimeout);
+  }
+
+
+  retryCallback() {
+    if (!this.wyzeDevicesUpdated ) {
+      this.handleGetDevicesFromWyze();
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      this.retryTimer = setTimeout(this.retryCallback.bind(this), this.retryTimeout);
+    } else {
+      this.log.info('Not running device discovery anymore!');
+    }
+  }
 
   // take name and create thermostat device for it
   generateThermostat(nickName) {
