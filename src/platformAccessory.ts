@@ -293,6 +293,9 @@ export class WyzeThermostatAccessory {
    * These are sent when HomeKit wants to know the current state of the accessory, for example, checking if a Light bulb is on.
    */
   async handleCurrentHeatingCoolingStateGet(): Promise<CharacteristicValue> {
+
+    this.processGetUpdate();
+
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
 
     // if auto, calculate current heating or cooling state
@@ -311,6 +314,8 @@ export class WyzeThermostatAccessory {
   }
 
   async handleTargetHeatingCoolingStateGet(): Promise<CharacteristicValue> {
+    this.processGetUpdate();
+
     // eslint-disable-next-line max-len
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.targetHeatingCoolingState}`);
 
@@ -318,8 +323,7 @@ export class WyzeThermostatAccessory {
   }
 
   async handleCurrentTemperatureGet(): Promise<CharacteristicValue> {
-
-
+    this.processGetUpdate();
     this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature).updateValue(this.currentTemperature);
 
     // eslint-disable-next-line max-len
@@ -328,6 +332,8 @@ export class WyzeThermostatAccessory {
   }
 
   async handleTargetTemperatureGet(): Promise<CharacteristicValue> {
+    this.processGetUpdate();
+
     // eslint-disable-next-line max-len
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
     // do some logic to check for heating or cooling, then return cooling_setpoint or heating_setpoint
@@ -341,13 +347,14 @@ export class WyzeThermostatAccessory {
   }
 
   async handleTemperatureDisplayUnitsGet(): Promise<CharacteristicValue> {
-
+    this.processGetUpdate();
     this.service.getCharacteristic(this.platform.Characteristic.TemperatureDisplayUnits).updateValue(this.currentTempUnit);
 
     return this.currentTempUnit;
   }
 
   async handleCoolingThresholdTemperatureGet(): Promise<CharacteristicValue> {
+    this.processGetUpdate();
 
     this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(this.currentCoolingThreshold);
 
@@ -357,6 +364,7 @@ export class WyzeThermostatAccessory {
   }
 
   async handleHeatingThresholdTemperatureGet(): Promise<CharacteristicValue> {
+    this.processGetUpdate();
 
     this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature).updateValue(this.currentHeatingThreshold);
 

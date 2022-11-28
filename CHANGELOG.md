@@ -5,6 +5,7 @@
 ### Changed
 
 - Updated setters to update characteristics if set is successful
+- Actually added processGetUpdate to getters to check data status each time
 
 ## [0.7.5] - 2022-11-28
 
