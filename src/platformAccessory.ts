@@ -295,37 +295,28 @@ export class WyzeThermostatAccessory {
    * These are sent when HomeKit wants to know the current state of the accessory, for example, checking if a Light bulb is on.
    */
   async handleCurrentHeatingCoolingStateGet(): Promise<CharacteristicValue> {
+    this.platform.log.info(`(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
 
-    let homekitState = this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
-
-    if (this.currentWyzeHeatingCoolingState > 2) {
-      // make decision on hot/cool based on temperatures since HK wont take AUTO as an option
-      // invoked if python returns state of 3 for Auto
-      if (this.currentTemperature > this.targetCoolingThreshold) {
-        homekitState = this.platform.Characteristic.CurrentHeatingCoolingState.COOL;
-      }
-      if (this.currentTemperature < this.targetHeatingThreshold) {
-        homekitState = this.platform.Characteristic.CurrentHeatingCoolingState.HEAT;
+    // if auto, calculate current heating or cooling state
+    if (this.targetHeatingCoolingState === this.platform.Characteristic.TargetHeatingCoolingState.AUTO) {
+      if (this.currentTemperature < this.targetCoolingThreshold && this.currentTemperature > this.targetHeatingThreshold) {
+        return this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
+      } else if (this.currentTemperature > this.targetCoolingThreshold) {
+        return this.platform.Characteristic.CurrentHeatingCoolingState.COOL;
+      } else if (this.currentTemperature < this.targetHeatingThreshold) {
+        return this.platform.Characteristic.CurrentHeatingCoolingState.HEAT;
       }
     } else {
-      // set homekit state to 0, 1, or 2 as given by python
-      homekitState = this.currentWyzeHeatingCoolingState;
+      return this.targetHeatingCoolingState;
     }
-
-    // auto, heat, cool, off -> heat, cool, off
-    this.service.getCharacteristic(this.platform.Characteristic.CurrentHeatingCoolingState).updateValue(homekitState);
-
-    // eslint-disable-next-line max-len
-    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic CurrentHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
-    this.currentHeatingCoolingState = homekitState;
-    return this.currentHeatingCoolingState;
+    return this.targetHeatingCoolingState;
   }
 
   async handleTargetHeatingCoolingStateGet(): Promise<CharacteristicValue> {
     // eslint-disable-next-line max-len
-    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
+    this.platform.log.info(`Room '${this.accessory.displayName}'(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.targetHeatingCoolingState}`);
 
-    return this.currentHeatingCoolingState;
+    return this.targetHeatingCoolingState;
   }
 
   async handleCurrentTemperatureGet(): Promise<CharacteristicValue> {
@@ -402,6 +393,7 @@ export class WyzeThermostatAccessory {
         const pythonJson: PythonWyzeStates = message;
         this.currentTemperature = this.far2Cel(pythonJson.temperature);
         this.currentWyzeHeatingCoolingState = Wyze2HomekitStates[pythonJson.system_mode.split('.')[1]];
+        this.targetHeatingCoolingState = this.currentWyzeHeatingCoolingState;
         this.platform.log.info(`Current Wyze State: ${this.currentWyzeHeatingCoolingState} for mode ${pythonJson.system_mode}`);
         this.currentCoolingThreshold = this.far2Cel(pythonJson.cooling_setpoint);
         this.currentHeatingThreshold = this.far2Cel(pythonJson.heating_setpoint);

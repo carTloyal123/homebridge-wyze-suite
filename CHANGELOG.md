@@ -1,6 +1,13 @@
 # Changelog - homebridge-wyze-suite
 
-## [0.7.3] - 2022-11-25
+## [0.7.3] - 2022-11-28
+
+### Changed
+
+- cleaned up target vs current heating cooling state logic
+- added wyze debug output
+
+## [0.7.2] - 2022-11-28
 
 ### Changed
 

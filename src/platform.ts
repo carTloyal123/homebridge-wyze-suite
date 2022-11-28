@@ -78,6 +78,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
 
     this.handleGetDevicesFromWyze();
+
+    // try again if failed somehow
   }
 
   handleGetDevicesFromWyze(pythonScriptName = 'getThermostatDeviceList') {

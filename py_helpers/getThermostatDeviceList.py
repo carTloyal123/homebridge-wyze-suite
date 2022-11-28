@@ -10,7 +10,10 @@ if len(sys.argv) != 3 :
   print(f"USAGE: {sys.argv[0]} wyze_email wyze_password")
   quit(1)
 
+wyze_sdk.set_stream_logger('wyze_sdk', level=logging.DEBUG)
 client = Client(email=sys.argv[1], password=os.sys.argv[2])
+
+
 
 for device in client.devices_list():
     if device.product.model == "CO_EA1":
