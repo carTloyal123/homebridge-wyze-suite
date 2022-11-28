@@ -68,6 +68,15 @@
         "required": true,
         "minimum": 0,
         "maximum": 60000
+      },
+      "newDataTimeout": {
+        "title": "NewDataTimeout",
+        "description": "Specify amount of time in milliseconds allowed before Wyze data is stale. Will refresh on call if exceeded.",
+        "type": "integer",
+        "default": 5000,
+        "required": true,
+        "minimum": 0,
+        "maximum": 60000
       }
       
     }

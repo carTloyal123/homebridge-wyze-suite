@@ -5,7 +5,7 @@ from wyze_sdk.errors import WyzeApiError
 
 if len(sys.argv) != 4 :
   sys.stdout = sys.stderr
-  print(f"USAGE: {sys.argv[0]} wyze_email wyze_password thermostat_nickname")
+  print(f"USAGE: {os.sys.argv[0]} wyze_email wyze_password thermostat_nickname")
   quit(1)
 
 device_mac = "Not_Set"
@@ -22,7 +22,6 @@ if device_mac == "Not_Set":
     sys.stdout = sys.stderr
     print(f"Thermostat not found in list of Wyze devices...")
     quit(1)
-
 
 try:
   thermostat_ = client.thermostats.info(device_mac=device_mac)

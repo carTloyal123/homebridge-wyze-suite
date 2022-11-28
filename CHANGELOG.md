@@ -1,5 +1,13 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.4] - 2022-11-28
+
+### Changed
+
+- Updated wyze python scripts for possiblen input bug, thanks ([**@shauntarves**](https://github.com/shauntarves))
+- Cleaned up debug messages
+- Updated data refresh logic for thermostat
+
 ## [0.7.3] - 2022-11-28
 
 ### Changed

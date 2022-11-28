@@ -13,14 +13,17 @@ const { exec } = require('child_process');
 export class WyzeThermostatAccessory {
   private service: Service;
   private isOn = false;
-  private currentStatus = '';
+
   private accLogName = '';
+  private currentStatus = '';
+  private wyzeDataUpdated = false;
+  private lastWyzeUpdate: Date = new Date();
+  private dataTimeout = this.platform.config.newDataTimeout;
+
   private p2stubs = this.platform.config.path2py_stubs;
   private username = this.platform.config.username;
 
-  private wyzeDataUpdated = false;
   private waitingToUpdate = true;
-  private lastWyzeUpdate: Date = new Date();
 
   private stateOff = this.platform.Characteristic.TargetHeatingCoolingState.OFF;
   private stateCool = this.platform.Characteristic.TargetHeatingCoolingState.COOL;
@@ -378,7 +381,6 @@ export class WyzeThermostatAccessory {
     };
 
     const pythonScript = pythonScriptName + '.py';
-
     const pyshell = new PythonShell(pythonScript, options);
 
     // sends a message to the Python script via stdin
@@ -398,8 +400,9 @@ export class WyzeThermostatAccessory {
         this.currentCoolingThreshold = this.far2Cel(pythonJson.cooling_setpoint);
         this.currentHeatingThreshold = this.far2Cel(pythonJson.heating_setpoint);
         this.currentTempUnit = Wyze2HomekitUnits[pythonJson.temperature_unit];
-        this.lastWyzeUpdate = new Date();
         this.platform.log.info('Updated Wyze states from Python!!');
+
+        this.lastWyzeUpdate.setUTCMilliseconds(Date.now());
         this.wyzeDataUpdated = true;
       } catch {
         this.platform.log.info('Unable to parse variables from python! :(');
@@ -420,8 +423,14 @@ export class WyzeThermostatAccessory {
       }
       this.platform.log.info('The exit code was: ' + code);
       this.platform.log.info('The exit signal was: ' + signal);
-      this.wyzeDataUpdated = true;
     });
+  }
+
+  processGetUpdate() {
+    const checkTime = new Date();
+    if (checkTime.getUTCMilliseconds() - this.lastWyzeUpdate.getUTCMilliseconds() > this.dataTimeout) {
+      this.waitingToUpdate = false;
+    }
   }
 
   far2Cel(input: number): number {
@@ -456,7 +465,6 @@ export class WyzeThermostatAccessory {
     while(curDate.getTime() - date.getTime() < millis);
   }
 }
-
 
 export enum Wyze2HomekitStates {
   OFF,

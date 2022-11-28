@@ -12,7 +12,6 @@ if len(sys.argv) != 4 :
     quit(1)
 
 device_mac = "Not_Set"
-wyze_sdk.set_stream_logger('wyze_sdk', level=logging.DEBUG)
 client = Client(email=os.sys.argv[1], password=os.sys.argv[2])
 thermoNickname = os.sys.argv[3] 
 
