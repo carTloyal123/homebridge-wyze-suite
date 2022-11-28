@@ -1,5 +1,11 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.15] - 2022-11-28
+
+### Changed
+
+- Updating retry logic to work correctly
+
 ## [0.7.12] - 2022-11-28
 
 ### Changed

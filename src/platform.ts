@@ -105,6 +105,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
       if (err) {
         this.log.info('Python ERROR getting devices:');
         this.log.info(`${err}`);
+        this.wyzeDevicesUpdated = false;
+        return;
       }
       this.log.info('The exit code was: ' + code);
       this.log.info('The exit signal was: ' + signal);
@@ -113,7 +115,6 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
       for (const nickName of nickNames) {
         this.generateThermostat( nickName );
       }
-
       this.wyzeDevicesUpdated = true;
     });
 
