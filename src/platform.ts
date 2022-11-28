@@ -24,7 +24,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   // this is used to track restored cached accessories
   public readonly accessories: PlatformAccessory[] = [];
 
-  private retryCount = 0;
+  private retryCount = 1;
   private retryMax = this.config.maximumDiscoveryAttempts;
   private retryTimeout = this.config.deviceDiscoveryTimeout;
   private p2stubs = this.config.path2py_stubs;
@@ -73,7 +73,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
 
     const unknown = 'Unknown';
 
-    this.log.info(`Getting all devices from wyze for the ${this.retryCount} out of ${this.retryMax} times...`);
+    this.log.info(`Getting Wyze devices for the ${this.retryCount} out of ${this.retryMax} times...`);
     const options: Options = {
       mode: 'text',
       pythonOptions: ['-u'], // get print results in real-time
