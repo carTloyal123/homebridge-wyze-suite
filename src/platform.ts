@@ -73,7 +73,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
 
     const unknown = 'Unknown';
 
-    this.log.info('Getting all Wyze devices!');
+    this.log.info(`Getting all devices from wyze for the ${this.retryCount} out of ${this.retryMax} times...`);
     const options: Options = {
       mode: 'text',
       pythonOptions: ['-u'], // get print results in real-time
@@ -131,15 +131,20 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     this.retryTimer = setTimeout(this.retryCallback.bind(this), this.retryTimeout);
   }
 
-
   retryCallback() {
-    if (!this.wyzeDevicesUpdated ) {
-      this.handleGetDevicesFromWyze();
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this.retryTimer = setTimeout(this.retryCallback.bind(this), this.retryTimeout);
+    if (this.retryCount < this.retryMax) {
+      if (!this.wyzeDevicesUpdated ) {
+        this.retryCount++;
+        this.handleGetDevicesFromWyze();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        this.retryTimer = setTimeout(this.retryCallback.bind(this), this.retryTimeout);
+      } else {
+        this.log.info('Not running device discovery anymore!');
+      }
     } else {
-      this.log.info('Not running device discovery anymore!');
+      this.log.info('Exceeded retry attempts, please try again later!');
     }
+
   }
 
   // take name and create thermostat device for it

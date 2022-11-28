@@ -5,6 +5,7 @@
 ### Changed
 
 - Updating retry logic to work correctly
+- Updated retry logic to have  max attempts
 
 ## [0.7.12] - 2022-11-28
 
