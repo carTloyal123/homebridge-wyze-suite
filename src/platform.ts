@@ -2,6 +2,8 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { WyzeThermostatAccessory } from './platformAccessory';
+import {Options, PythonShell} from 'python-shell';
+
 
 /* eslint-disable */
 const { exec } = require('child_process');
@@ -25,6 +27,9 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   private retryCount = 0;
   private retryMax = this.config.maximumDiscoveryAttempts;
   private retryTimeout = this.config.deviceDiscoveryTimeout;
+  private p2stubs = this.config.path2py_stubs;
+  private wyzeDevicesUpdated = false;
+
 
   constructor(
     public readonly log: Logger,
@@ -68,51 +73,58 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     // Make list of nicknames for each thermostat.
     //
 
-    let pythonOutput = '';
-    let line = '';
-    const unknown = 'Unknown';
-
     this.pausecomp(this.retryTimeout);
     // run python to get devices
     this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
-    exec(`python3 ${this.config.path2py_stubs}/getThermostatDeviceList.py ${this.config.username} '${this.config.password}'`,
-      (error, stdout, stderr) => {
-        if (error) {
-          // if an error, iterate the retry count, cancel interval if at max tries
-          this.log.info(`error: ${error.message}`);
-          this.retryCount++;
-          if(this.retryCount === this.retryMax) {
-            this.log.info('Failed to get devices, increasing try count...');
-          }
+
+    this.handleGetDevicesFromWyze();
+  }
+
+  handleGetDevicesFromWyze(pythonScriptName = 'getThermostatDeviceList') {
+
+    const unknown = 'Unknown';
+
+    this.log.info('Getting all Wyze devices!');
+    const options: Options = {
+      mode: 'text',
+      pythonOptions: ['-u'], // get print results in real-time
+      scriptPath: this.p2stubs,
+      args: [`${this.config.username}`, `${this.config.password}`],
+    };
+
+    const pythonScript = pythonScriptName + '.py';
+
+    const pyshell = new PythonShell(pythonScript, options);
+
+    pyshell.on('message', (message: string) => {
+      // received a message sent from the Python script (a simple "print" statement)
+      this.log.info(message);
+      try {
+        // parse devices here
+        if (!message.includes(unknown)) {
+          nickNames.push(message);
         } else {
-          // if no error, print stderr and steal the stdout for processing
-          this.log.info('Got devices from Python for Wyze!');
-          this.log.info(stderr);
-          this.log.info(stdout);
-          pythonOutput = stdout;
-          // if no error, clear the interval to exit the set interva
-          this.log.info('Should generate devices!');
-
-          for(let i = 0; i < pythonOutput.length; i++) {
-            const c = pythonOutput.charAt(i);
-            if( c === '\n') {
-              if (!(line.includes(unknown))) {
-                nickNames.push( line );
-                this.log.info(`Found new device in Wyze: ${line}`);
-              }
-              line = '';
-              continue;
-            }
-            line = line.concat( pythonOutput.charAt(i) );
-          }
-
-          // loop over the discovered devices and generate accessories for each thermostat
-          this.log.info(`Generating devices from Wyze Suite: ${nickNames.length}`);
-          for (const nickName of nickNames) {
-            this.generateThermostat( nickName );
-          }
+          this.log.info('Found unknown device, skipping!');
         }
-      });
+      } catch {
+        this.log.info('Unable to parse Nickname from python! :(');
+      }
+
+    });
+    // end the input stream and allow the process to exit
+    pyshell.end((err, code, signal) => {
+      if (err) {
+        this.log.info('Python ERROR:' + err);
+      }
+      this.log.info('The exit code was: ' + code);
+      this.log.info('The exit signal was: ' + signal);
+
+      this.log.info(`Generating devices from Wyze Suite: ${nickNames.length}`);
+      for (const nickName of nickNames) {
+        this.generateThermostat( nickName );
+      }
+    });
+
   }
 
 

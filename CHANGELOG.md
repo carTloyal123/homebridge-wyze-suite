@@ -1,5 +1,12 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.3] - 2022-11-25
+
+### Changed
+
+- Thermostat refreshes device states according to config param actually works
+- Update to device discovery to use python shell, generate on close
+
 
 ## [0.7.2] - 2022-11-25
 

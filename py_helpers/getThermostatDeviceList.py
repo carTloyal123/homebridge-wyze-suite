@@ -16,5 +16,7 @@ for device in client.devices_list():
     if device.product.model == "CO_EA1":
         print(f"{device.nickname}")
 
+quit(0)
+
 
 

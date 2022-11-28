@@ -395,13 +395,14 @@ export class WyzeThermostatAccessory {
 
     pyshell.on('message', (message) => {
       // received a message sent from the Python script (a simple "print" statement)
+      this.platform.log.info(`New message from ${pythonScriptName}:`);
       this.platform.log.info(message);
       // parse as JSON here
       try {
         const pythonJson: PythonWyzeStates = message;
         this.currentTemperature = this.far2Cel(pythonJson.temperature);
-        this.currentWyzeHeatingCoolingState = Wyze2HomekitStates[pythonJson.system_mode];
-        this.platform.log.info(`Current Wyze State: ${this.currentWyzeHeatingCoolingState}`);
+        this.currentWyzeHeatingCoolingState = Wyze2HomekitStates[pythonJson.system_mode.split('.')[1]];
+        this.platform.log.info(`Current Wyze State: ${this.currentWyzeHeatingCoolingState} for mode ${pythonJson.system_mode}`);
         this.currentCoolingThreshold = this.far2Cel(pythonJson.cooling_setpoint);
         this.currentHeatingThreshold = this.far2Cel(pythonJson.heating_setpoint);
         this.currentTempUnit = Wyze2HomekitUnits[pythonJson.temperature_unit];
@@ -416,22 +417,9 @@ export class WyzeThermostatAccessory {
     });
 
     pyshell.on('stderr', (stderr) => {
-      this.platform.log.info(stderr);
+      this.platform.log.info('Device STDERR: ' + stderr);
     });
 
-    pyshell.on('error', (err) => {
-      this.platform.log.info(err.message);
-      this.wyzeDataUpdated = false;
-    });
-
-    pyshell.on('close', (err) => {
-      if (err) {
-        this.platform.log.info(err);
-        return;
-      }
-      this.platform.log.info('Python closed without error!');
-      this.wyzeDataUpdated = true;
-    });
 
     // end the input stream and allow the process to exit
     pyshell.end((err, code, signal) => {
@@ -440,7 +428,6 @@ export class WyzeThermostatAccessory {
       }
       this.platform.log.info('The exit code was: ' + code);
       this.platform.log.info('The exit signal was: ' + signal);
-      this.platform.log.info('finished');
       this.wyzeDataUpdated = true;
     });
   }
