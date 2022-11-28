@@ -1,5 +1,19 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.6] - 2022-11-28
+
+### Changed
+
+- Updated setters to update characteristics if set is successful
+
+## [0.7.5] - 2022-11-28
+
+### Changed
+
+- Updated SET methods for sending HK values to Wyze scripts
+- Updated refresh to use setinterval instead of while loops
+- Updated get devices to use setTimeout recursively until devices found
+
 ## [0.7.4] - 2022-11-28
 
 ### Changed

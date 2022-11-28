@@ -26,7 +26,7 @@ roboVacNickname = os.sys.argv[3]
 targetSystemState = int(os.sys.argv[4])
 
 for device in client.devices_list():
-    if device.product.model == "JA_RO2" :
+    if device.product.model == "CO_EA1" :
         if device.nickname == roboVacNickname :
             device_mac = device.mac
 

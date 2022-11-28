@@ -21,8 +21,11 @@ if len(sys.argv) != 5 :
 
 device_mac = "Not_Set"
 
+print("Email: " + os.sys.argv[1])
+print("Pass: " + os.sys.argv[2])
+
 client = Client(email=os.sys.argv[1], password=os.sys.argv[2])
-roboVacNickname = os.sys.argv[3] 
+thermostatNickname = os.sys.argv[3] 
 try:
     targetTemperature = float(os.sys.argv[4])
 except:
@@ -30,9 +33,11 @@ except:
     print(f"Set Thermostat Cooling Temp failed to read temperature string!")
     quit(1)
 
+print("Target: " + str(targetTemperature))
+
 for device in client.devices_list():
-    if device.product.model == "JA_RO2" :
-        if device.nickname == roboVacNickname :
+    if device.product.model == "CO_EA1" :
+        if device.nickname == thermostatNickname :
             device_mac = device.mac
 
 if device_mac == "Not_Set":
@@ -43,6 +48,7 @@ if device_mac == "Not_Set":
 try:
     thermostat = client.thermostats.info(device_mac=device_mac)
     client.thermostats.set_cooling_setpoint(device_mac=device_mac, device_model="CO_EA1", cooling_setpoint=targetTemperature)
+    print(f"Set target temperature for: {thermostatNickname} to: {targetTemperature}")
     quit(0)
 
 except WyzeApiError as e:

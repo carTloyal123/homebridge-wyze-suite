@@ -79,7 +79,16 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
 
     this.handleGetDevicesFromWyze();
 
-    // try again if failed somehow
+    let retryTimer = setTimeout(function timeoutFunction(this) {
+      if (!this.wyzeDevicesUpdated ) {
+        this.handleGetDevicesFromWyze();
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        retryTimer = setTimeout(timeoutFunction, this.retryTimeout);
+      } else {
+        this.log.info('Not running device discovery anymore!');
+      }
+    }, this.retryTimeout);
   }
 
   handleGetDevicesFromWyze(pythonScriptName = 'getThermostatDeviceList') {
@@ -116,7 +125,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     // end the input stream and allow the process to exit
     pyshell.end((err, code, signal) => {
       if (err) {
-        this.log.info('Python ERROR:' + err);
+        this.log.info('Python ERROR getting devices:');
+        this.log.info(`${err}`);
       }
       this.log.info('The exit code was: ' + code);
       this.log.info('The exit signal was: ' + signal);
@@ -125,6 +135,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
       for (const nickName of nickNames) {
         this.generateThermostat( nickName );
       }
+
+      this.wyzeDevicesUpdated = true;
     });
 
   }

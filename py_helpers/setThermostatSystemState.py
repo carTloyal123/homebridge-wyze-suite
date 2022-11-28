@@ -22,12 +22,12 @@ if len(sys.argv) != 5 :
 device_mac = "Not_Set"
 
 client = Client(email=os.sys.argv[1], password=os.sys.argv[2])
-roboVacNickname = os.sys.argv[3] 
+thermostatNickname = os.sys.argv[3] 
 targetSystemState = int(os.sys.argv[4])
 
 for device in client.devices_list():
-    if device.product.model == "JA_RO2" :
-        if device.nickname == roboVacNickname :
+    if device.product.model == "CO_EA1" :
+        if device.nickname == thermostatNickname :
             device_mac = device.mac
 
 if device_mac == "Not_Set":
@@ -36,8 +36,15 @@ if device_mac == "Not_Set":
     quit(1)
 
 try:
+    targetState = HomekitToWyze(targetSystemState)
+    if targetState == -1:
+        print(f"Invalid Homekit state for Wyze to set, aborting setSystemState!")
+        quit(1)
+
     thermostat = client.thermostats.info(device_mac=device_mac)
     client.thermostats.set_system_mode(device_mac=device_mac, device_model="CO_EA1", system_mode=HomekitToWyze(targetSystemState))
+    print(f"Set target state for: {thermostatNickname} to: {targetState}")
+
     quit(0)
 
 except WyzeApiError as e:
