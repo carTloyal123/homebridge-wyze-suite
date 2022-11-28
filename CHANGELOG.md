@@ -1,5 +1,11 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.12] - 2022-11-28
+
+### Changed
+
+- Tweaking temperature units
+
 ## [0.7.11] - 2022-11-28
 
 ### Changed

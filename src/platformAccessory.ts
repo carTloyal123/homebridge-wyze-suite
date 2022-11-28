@@ -323,7 +323,9 @@ export class WyzeThermostatAccessory {
 
   async handleCurrentTemperatureGet(): Promise<CharacteristicValue> {
     this.processGetUpdate();
-    this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature).updateValue(this.currentTemperature);
+    const tempC = this.far2Cel(this.currentTemperature);
+
+    this.service.getCharacteristic(this.platform.Characteristic.CurrentTemperature).updateValue(tempC);
 
     // eslint-disable-next-line max-len
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic CurrentTemperature -> ${this.currentTemperature}`);
@@ -332,16 +334,19 @@ export class WyzeThermostatAccessory {
 
   async handleTargetTemperatureGet(): Promise<CharacteristicValue> {
     this.processGetUpdate();
-
+    const heatingC = this.far2Cel(this.currentHeatingThreshold);
+    const coolingC = this.far2Cel(this.currentCoolingThreshold);
+    const tempC = this.far2Cel(this.currentTemperature);
     // eslint-disable-next-line max-len
+
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
     // do some logic to check for heating or cooling, then return cooling_setpoint or heating_setpoint
     if (this.currentHeatingCoolingState === this.stateCool) {
-      return this.targetHeatingThreshold;
+      return heatingC;
     } else if (this.currentHeatingCoolingState === this.stateHeat) {
-      return this.targetCoolingThreshold;
+      return coolingC;
     } else {
-      return this.currentTemperature;
+      return tempC;
     }
   }
 
@@ -354,8 +359,8 @@ export class WyzeThermostatAccessory {
 
   async handleCoolingThresholdTemperatureGet(): Promise<CharacteristicValue> {
     this.processGetUpdate();
-
-    this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(this.currentCoolingThreshold);
+    const coolingC = this.far2Cel(this.currentCoolingThreshold);
+    this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(coolingC);
 
     // eslint-disable-next-line max-len
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Cooling Threshold -> ${this.currentCoolingThreshold}`);
@@ -364,8 +369,8 @@ export class WyzeThermostatAccessory {
 
   async handleHeatingThresholdTemperatureGet(): Promise<CharacteristicValue> {
     this.processGetUpdate();
-
-    this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature).updateValue(this.currentHeatingThreshold);
+    const heatingC = this.far2Cel(this.currentHeatingThreshold);
+    this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature).updateValue(heatingC);
 
     // eslint-disable-next-line max-len
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Current Heating Threshold -> ${this.currentHeatingThreshold}`);
