@@ -1,5 +1,12 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.11] - 2022-11-28
+
+### Changed
+
+- Run get states once at startup for thermostat device loop
+- Updated units for setting HK characteristics
+
 ## [0.7.8] - 2022-11-28
 
 ### Changed

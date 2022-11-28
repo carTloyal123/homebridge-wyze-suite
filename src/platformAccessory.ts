@@ -104,6 +104,7 @@ export class WyzeThermostatAccessory {
     if (!this.platform.config.refreshIntervalMilliSeconds) {
       this.platform.config.refreshIntervalMilliSeconds = 20000;
     }
+    this.handleGetAllWyzeStates(); // get once at startup
     this.refreshIntervalID = setInterval(() => {
       this.wyzeDataUpdated = false;
       this.handleGetAllWyzeStates();
@@ -192,17 +193,18 @@ export class WyzeThermostatAccessory {
         switch (this.currentHeatingCoolingState) {
           case this.stateCool:
             this.currentCoolingThreshold = this.targetCurrentTemperature;
-            this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(this.currentCoolingThreshold);
 
             break;
           case this.stateHeat:
             this.currentHeatingThreshold = this.targetCurrentTemperature;
-            this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(this.currentHeatingThreshold);
             break;
 
           default:
             break;
         }
+
+        this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(value as number);
+
 
         // eslint-disable-next-line max-len
         this.platform.log.info(`(${this.deviceNickname}): Set Characteristic TargetTemp -> '${this.targetCurrentTemperature}'`);
@@ -233,7 +235,7 @@ export class WyzeThermostatAccessory {
         }
 
         this.currentCoolingThreshold = this.targetCoolingThreshold;
-        this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(this.currentCoolingThreshold);
+        this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(value as number);
 
         // eslint-disable-next-line max-len
         this.platform.log.info(`(${this.deviceNickname}): Set Characteristic Cooling Threshold -> '${this.targetCoolingThreshold}'`);
@@ -262,7 +264,7 @@ export class WyzeThermostatAccessory {
         }
 
         this.currentHeatingThreshold = this.targetHeatingThreshold;
-        this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature).updateValue(this.targetHeatingThreshold);
+        this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature).updateValue(value as number);
 
         // eslint-disable-next-line max-len
         this.platform.log.info(`(${this.deviceNickname}): Set Characteristic Heating Threshold -> '${this.currentHeatingThreshold}'`);
