@@ -1,6 +1,12 @@
 # Changelog - homebridge-wyze-suite
 
-## [0.7.6] - 2022-11-28
+## [0.7.8] - 2022-11-28
+
+### Changed
+
+- Updated correct temperature value being sent to Wyze based on temperature units, HK always sends celsius!
+
+## [0.7.7] - 2022-11-28
 
 ### Changed
 

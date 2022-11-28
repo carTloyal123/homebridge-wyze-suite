@@ -120,9 +120,6 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   }
 
   discoverDevices() {
-    //
-    // Make list of nicknames for each thermostat.
-    //
 
     this.pausecomp(this.retryTimeout);
     // run python to get devices

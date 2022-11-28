@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-/* eslint-disable max-len */
+
 import { Service, PlatformAccessory, CharacteristicValue } from 'homebridge';
 import { WyzeSuitePlatform } from './platform';
 import {Options, PythonShell} from 'python-shell';
@@ -22,8 +22,6 @@ export class WyzeThermostatAccessory {
 
   private p2stubs = this.platform.config.path2py_stubs;
   private username = this.platform.config.username;
-
-
 
   private stateOff = this.platform.Characteristic.TargetHeatingCoolingState.OFF;
   private stateCool = this.platform.Characteristic.TargetHeatingCoolingState.COOL;
@@ -52,7 +50,6 @@ export class WyzeThermostatAccessory {
     private readonly accessory: PlatformAccessory,
     private readonly deviceNickname: string,
   ) {
-
     // set accessory information
     this.accessory.getService(this.platform.Service.AccessoryInformation)!
       .setCharacteristic(this.platform.Characteristic.Manufacturer, 'Wyze')
@@ -150,7 +147,7 @@ export class WyzeThermostatAccessory {
   async handleTargetTemperatureSet(value: CharacteristicValue) {
 
     // set target temperature in wyze-sdk
-    this.targetCurrentTemperature = value as number;
+    this.targetCurrentTemperature = this.getCorrrectTemperature(value as number, Wyze2HomekitUnits.C);
     this.platform.log.info(`Setting Target temperature to: ${this.targetCurrentTemperature}`);
 
     // check if they are already the same for some reason
@@ -216,7 +213,7 @@ export class WyzeThermostatAccessory {
 
   async handleCoolingThresholdTemperatureSet(value: CharacteristicValue) {
     // set target temperature in wyze-sdk
-    this.targetCoolingThreshold = value as number;
+    this.targetCoolingThreshold = this.getCorrrectTemperature(value as number, Wyze2HomekitUnits.C);
     this.platform.log.info(`Setting Target Cooling temperature to: ${this.targetCoolingThreshold}`);
 
     if (this.currentWyzeHeatingCoolingState !== this.stateAuto) {
@@ -246,7 +243,7 @@ export class WyzeThermostatAccessory {
 
   async handleHeatingThresholdTemperatureSet(value: CharacteristicValue) {
     // set target temperature in wyze-sdk
-    this.targetHeatingThreshold = value as number;
+    this.targetHeatingThreshold = this.getCorrrectTemperature(value as number, Wyze2HomekitUnits.C);
 
     if (this.currentWyzeHeatingCoolingState !== this.stateAuto) {
       this.platform.log.info('System currently NOT AUTO, not setting Heating threshold setpoint temp!');
@@ -442,6 +439,19 @@ export class WyzeThermostatAccessory {
 
   cel2Far(input: number): number {
     return ((input * (9/5)) + 32);
+  }
+
+  getCorrrectTemperature(input: number, inputUnits: Wyze2HomekitUnits): number {
+    if (this.currentTempUnit === inputUnits) {
+      return input;
+    } else {
+      if (inputUnits === Wyze2HomekitUnits.F) {
+        return this.far2Cel(input);
+      } else if (inputUnits === Wyze2HomekitUnits.C) {
+        return this.cel2Far(input);
+      }
+    }
+    return input;
   }
 
   myLogger( line ) {
