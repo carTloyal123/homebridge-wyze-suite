@@ -1,5 +1,11 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.18] - 2022-11-28
+
+### Changed
+
+- Updated NPM version
+
 ## [0.7.15] - 2022-11-28
 
 ### Changed
