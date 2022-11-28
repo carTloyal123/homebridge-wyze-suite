@@ -55,7 +55,9 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
    */
   configureAccessory(accessory: PlatformAccessory) {
     this.log.info(`Loading accessory from cache: '${accessory.displayName}'`);
-
+    if (accessory) {
+      this.wyzeDevicesUpdated = true;
+    }
     // add the restored accessory to the accessories cache so we can track if it has already been registered
     this.accessories.push(accessory);
   }
