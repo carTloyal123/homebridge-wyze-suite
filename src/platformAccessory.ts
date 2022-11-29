@@ -132,7 +132,7 @@ export class WyzeThermostatAccessory {
           // unable to set state?
           return;
         }
-        this.service.getCharacteristic(this.platform.Characteristic.CurrentHeatingCoolingState).updateValue(targetValue);
+        this.service.getCharacteristic(this.platform.Characteristic.TargetHeatingCoolingState).updateValue(targetValue);
         this.currentWyzeHeatingCoolingState = targetValue;
       });
   }
