@@ -1,5 +1,17 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.22] - 2022-11-28
+
+### Changed
+
+- Trying to fix temperature logic...again
+
+## [0.7.21] - 2022-11-28
+
+### Changed
+
+- Updated NPM version to 21
+
 ## [0.7.18] - 2022-11-28
 
 ### Changed

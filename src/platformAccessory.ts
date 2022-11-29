@@ -29,9 +29,9 @@ export class WyzeThermostatAccessory {
   private stateAuto = this.platform.Characteristic.TargetHeatingCoolingState.AUTO;
 
   private currentHeatingCoolingState = this.platform.Characteristic.CurrentHeatingCoolingState.OFF; // only off, cool, heat
-  private targetHeatingCoolingState = this.stateOff; // off, cool, heat, auto
-
   private currentWyzeHeatingCoolingState = 0;
+
+  private targetHeatingCoolingState = this.stateOff; // off, cool, heat, auto
 
   private currentTemperature = 20.5;
   private targetCurrentTemperature = 20.5;
@@ -109,16 +109,15 @@ export class WyzeThermostatAccessory {
     , this.platform.config.refreshIntervalMilliSeconds);
   }
 
-
   /*
    * Handle "SET" requests from HomeKit
    * These are sent when the user changes the state of an accessory, for example, turning on a Switch.
    *
-   * data: home app -> request to HK ->
+   * data: home app -> request to HK -> HB -> Wyze
    */
   async handleTargetHeatingCoolingStateSet(value: CharacteristicValue) {
 
-    this.targetHeatingCoolingState = value as number;
+    const targetValue = value as number;
     // value can be heat, cool, off
     this.accLogName = `'${this.accessory.displayName}'(${this.deviceNickname})`;
     this.platform.log.info(`(${this.deviceNickname}): Set Characteristic On -> '${this.isOn}'`);
@@ -130,15 +129,17 @@ export class WyzeThermostatAccessory {
 
     // run script to set system state in python
     // eslint-disable-next-line max-len
-    exec(`python3 ${this.p2stubs}/setThermostatSystemState.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetHeatingCoolingState}'`,
+    exec(`python3 ${this.p2stubs}/setThermostatSystemState.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${targetValue}'`,
       (error) => {
         if (error) {
           this.platform.log.info(`error: ${error.message}`);
           // unable to set state?
           return;
         }
-        this.service.getCharacteristic(this.platform.Characteristic.CurrentHeatingCoolingState).updateValue(this.targetHeatingCoolingState);
-        this.currentHeatingCoolingState = this.targetHeatingCoolingState;
+        this.service.getCharacteristic(this.platform.Characteristic.CurrentHeatingCoolingState).updateValue(targetValue);
+        this.currentHeatingCoolingState = targetValue;
+        this.targetHeatingCoolingState = targetValue;
+        this.currentWyzeHeatingCoolingState = targetValue;
       });
   }
 
@@ -151,14 +152,19 @@ export class WyzeThermostatAccessory {
 
     // check for current state to set temp correctly
     let py_prog = '';
-    switch (this.currentHeatingCoolingState) {
+    switch (this.currentWyzeHeatingCoolingState) {
       case this.stateCool:
         py_prog = 'setThermostatTargetCoolingTemp';
         break;
       case this.stateHeat:
         py_prog = 'setThermostatTargetHeatingTemp';
         break;
-
+      case this.stateAuto:
+        this.platform.log.info('Not setting target temp for auto system!');
+        return;
+      case this.stateOff:
+        this.platform.log.info('Not setting target temp for auto system!');
+        return;
       default:
         break;
     }
@@ -214,7 +220,7 @@ export class WyzeThermostatAccessory {
           // unable to set state?
           return;
         }
-        this.currentCoolingThreshold = this.getCorrrectTemperature(targetValue, Wyze2HomekitUnits.C);
+        this.currentCoolingThreshold = targetValue;
 
         this.service.getCharacteristic(this.platform.Characteristic.CoolingThresholdTemperature).updateValue(targetValue);
 
@@ -246,7 +252,7 @@ export class WyzeThermostatAccessory {
           return;
         }
 
-        this.currentHeatingThreshold = this.getCorrrectTemperature(targetValue, Wyze2HomekitUnits.C);
+        this.currentHeatingThreshold = targetValue;
         this.service.getCharacteristic(this.platform.Characteristic.HeatingThresholdTemperature).updateValue(targetValue);
 
         // eslint-disable-next-line max-len
@@ -281,7 +287,7 @@ export class WyzeThermostatAccessory {
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic TargetHeatingCoolingState -> ${this.currentHeatingCoolingState}`);
 
     // if auto, calculate current heating or cooling state
-    if (this.targetHeatingCoolingState === this.platform.Characteristic.TargetHeatingCoolingState.AUTO) {
+    if (this.currentWyzeHeatingCoolingState === this.platform.Characteristic.TargetHeatingCoolingState.AUTO) {
       if (this.currentTemperature < this.currentCoolingThreshold && this.currentTemperature > this.currentHeatingThreshold) {
         return this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
       } else if (this.currentTemperature > this.currentCoolingThreshold) {
@@ -290,9 +296,9 @@ export class WyzeThermostatAccessory {
         return this.platform.Characteristic.CurrentHeatingCoolingState.HEAT;
       }
     } else {
-      return this.targetHeatingCoolingState;
+      return this.currentWyzeHeatingCoolingState;
     }
-    return this.targetHeatingCoolingState;
+    return this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
   }
 
   async handleTargetHeatingCoolingStateGet(): Promise<CharacteristicValue> {
@@ -354,6 +360,8 @@ export class WyzeThermostatAccessory {
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Current Heating Threshold -> ${this.currentHeatingThreshold}`);
     return this.currentHeatingThreshold;
   }
+
+  // End Get Methods --------------------------------------------------------------------------------------------------------------
 
   async handleGetAllWyzeStates(pythonScriptName = 'getThermostatVariables') {
 
