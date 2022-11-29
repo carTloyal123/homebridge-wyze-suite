@@ -169,8 +169,9 @@ export class WyzeThermostatAccessory {
         break;
     }
 
+    const wyzeTargetTemp = this.cel2Far(targetValue);
     // eslint-disable-next-line max-len
-    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${this.targetCurrentTemperature}'`,
+    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${wyzeTargetTemp}'`,
       (error) => {
         if (error) {
           this.platform.log.info(`error: ${error.message}`);
@@ -326,10 +327,13 @@ export class WyzeThermostatAccessory {
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
     // do some logic to check for heating or cooling, then return cooling_setpoint or heating_setpoint
     if (this.currentHeatingCoolingState === this.stateCool) {
+      this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(this.currentCoolingThreshold);
       return this.currentCoolingThreshold;
     } else if (this.currentHeatingCoolingState === this.stateHeat) {
+      this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(this.currentHeatingThreshold);
       return this.currentHeatingThreshold;
     } else {
+      this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(this.currentTemperature);
       return this.currentTemperature;
     }
   }
