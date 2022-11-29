@@ -1,5 +1,11 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.24] - 2022-11-28
+
+### Changed
+
+- Update temperature logic for target temp during heat/cool
+
 ## [0.7.23] - 2022-11-28
 
 ### Changed

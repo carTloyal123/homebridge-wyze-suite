@@ -120,7 +120,7 @@ export class WyzeThermostatAccessory {
     const targetValue = value as number;
     // value can be heat, cool, off
     this.accLogName = `'${this.accessory.displayName}'(${this.deviceNickname})`;
-    this.platform.log.info(`(${this.deviceNickname}): Set Characteristic On -> '${this.isOn}'`);
+    this.platform.log.info(`(${this.deviceNickname}): Set Target Heating Cooling State -> '${targetValue}'`);
 
     if (value === this.currentHeatingCoolingState) {
       this.platform.log.info('System state already set!');
@@ -326,9 +326,9 @@ export class WyzeThermostatAccessory {
     this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
     // do some logic to check for heating or cooling, then return cooling_setpoint or heating_setpoint
     if (this.currentHeatingCoolingState === this.stateCool) {
-      return this.currentHeatingThreshold;
-    } else if (this.currentHeatingCoolingState === this.stateHeat) {
       return this.currentCoolingThreshold;
+    } else if (this.currentHeatingCoolingState === this.stateHeat) {
+      return this.currentHeatingThreshold;
     } else {
       return this.currentTemperature;
     }
