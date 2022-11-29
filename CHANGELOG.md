@@ -1,5 +1,11 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.23] - 2022-11-28
+
+### Changed
+
+- Finally found bug breaking temperature conversions
+
 ## [0.7.22] - 2022-11-28
 
 ### Changed

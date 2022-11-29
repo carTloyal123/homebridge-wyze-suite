@@ -211,9 +211,9 @@ export class WyzeThermostatAccessory {
     }
     // check for current state to set temp correctly
     const py_prog = 'setThermostatTargetCoolingTemp';
-
+    const wyzeTargetValue = this.cel2Far(targetValue);
     // eslint-disable-next-line max-len
-    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${targetValue}'`,
+    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${wyzeTargetValue}'`,
       (error) => {
         if (error) {
           this.platform.log.info(`error: ${error.message}`);
@@ -242,9 +242,9 @@ export class WyzeThermostatAccessory {
     }
     // check for current state to set temp correctly
     const py_prog = 'setThermostatTargetHeatingTemp';
-
+    const wyzeTargetValue = this.cel2Far(targetValue);
     // eslint-disable-next-line max-len
-    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${targetValue}'`,
+    exec(`python3 ${this.p2stubs}/${py_prog}.py ${this.username} '${this.platform.config.password}' '${this.deviceNickname}' '${wyzeTargetValue}'`,
       (error) => {
         if (error) {
           this.platform.log.info(`error: ${error.message}`);
