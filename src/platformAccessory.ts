@@ -34,7 +34,6 @@ export class WyzeThermostatAccessory {
   private targetHeatingCoolingState = this.stateOff; // off, cool, heat, auto
 
   private currentTemperature = 20.5;
-  private targetCurrentTemperature = 20.5;
 
   private currentCoolingThreshold = 21.0;
   private currentHeatingThreshold = 20.0;
@@ -322,20 +321,22 @@ export class WyzeThermostatAccessory {
 
   async handleTargetTemperatureGet(): Promise<CharacteristicValue> {
     this.processGetUpdate();
-
+    let out = 20.5;
     // eslint-disable-next-line max-len
-    this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Target Temperature -> ${this.targetCurrentTemperature}`);
     // do some logic to check for heating or cooling, then return cooling_setpoint or heating_setpoint
     if (this.currentHeatingCoolingState === this.stateCool) {
+      out = this.currentCoolingThreshold;
       this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(this.currentCoolingThreshold);
-      return this.currentCoolingThreshold;
     } else if (this.currentHeatingCoolingState === this.stateHeat) {
+      out = this.currentHeatingThreshold;
       this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(this.currentHeatingThreshold);
-      return this.currentHeatingThreshold;
     } else {
+      out = this.currentTemperature;
       this.service.getCharacteristic(this.platform.Characteristic.TargetTemperature).updateValue(this.currentTemperature);
-      return this.currentTemperature;
     }
+    this.platform.log.info(`(${this.deviceNickname}): Get Characteristic Target Temperature -> ${out}`);
+    return out;
+
   }
 
   async handleTemperatureDisplayUnitsGet(): Promise<CharacteristicValue> {
