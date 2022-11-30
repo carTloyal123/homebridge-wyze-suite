@@ -4,6 +4,12 @@
 
 ### Changed
 
+- Tidy up logger to actually be useful now, default to no logging. 1 for full logging
+
+## [0.7.25] - 2022-11-28
+
+### Changed
+
 - Fixed set temperature for single mode heat/cool
 
 ## [0.7.24] - 2022-11-28
