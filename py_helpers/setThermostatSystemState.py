@@ -5,6 +5,8 @@ import wyze_sdk
 from wyze_sdk import Client
 from wyze_sdk.models.devices.thermostats import ThermostatSystemMode
 from wyze_sdk.errors import WyzeApiError
+from authenticationTokenService import getAccessToken
+
 
 def HomekitToWyze(stateNum):
     match stateNum:
@@ -19,9 +21,20 @@ if len(sys.argv) != 5 :
   print(f"USAGE: {sys.argv[0]} wyze_email wyze_password thermostate_nickname target_state")
   quit(1)
 
-device_mac = "Not_Set"
+email=os.sys.argv[1]
+password=os.sys.argv[2]
 
-client = Client(email=os.sys.argv[1], password=os.sys.argv[2])
+# call auth service to get access token or refresh if needed
+getAccessToken(wyzeEmail=email, wyzePassword=password)
+
+clientToken = os.environ.get('WYZE_ACCESS_TOKEN')
+if clientToken is None:
+    print("Token Error!")
+    quit(1)
+
+client = Client(token=os.environ['WYZE_ACCESS_TOKEN'])
+
+device_mac = "Not_Set"
 thermostatNickname = os.sys.argv[3] 
 targetSystemState = int(os.sys.argv[4])
 

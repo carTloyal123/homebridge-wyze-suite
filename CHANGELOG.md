@@ -1,5 +1,12 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.26] - 2022-12-5
+
+### Changed
+
+- Update wyze-sdk to have token authentication
+- Changed python scripts to use authentication tokens instead of username/pass  every time
+
 ## [0.7.25] - 2022-11-28
 
 ### Changed

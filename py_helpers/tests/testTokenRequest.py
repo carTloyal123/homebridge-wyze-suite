@@ -23,8 +23,8 @@ if clientToken is None:
     print("Token Error!")
     quit(1)
 
-client = Client(token=os.environ['WYZE_ACCESS_TOKEN'])
 device_mac = "Not_Set"
+client = Client(token=os.environ['WYZE_ACCESS_TOKEN'])
 thermoNickname = os.sys.argv[3] 
 
 for device in client.devices_list():
