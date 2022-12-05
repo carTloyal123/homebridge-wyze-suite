@@ -2,7 +2,7 @@ import { API, DynamicPlatformPlugin, Logger, PlatformAccessory, PlatformConfig, 
 
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings';
 import { WyzeThermostatAccessory } from './platformAccessory';
-import {Options, PythonShell} from 'python-shell';
+import { Options, PythonShell } from 'python-shell';
 
 
 /* eslint-disable */

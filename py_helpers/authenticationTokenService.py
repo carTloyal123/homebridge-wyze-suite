@@ -11,7 +11,7 @@ WYZE_AUTH_TIMEOUT_SECS = 24*60*60
 def getAccessToken(wyzeEmail=None, wyzePassword=None):
     # check env
     if os.environ.get('WYZE_ACCESS_TOKEN') is not None:
-        print(f"[WyzeAuth] Access token already set in env!")
+        # print(f"[WyzeAuth] Access token already set in env!")
         return
 
     # check disk
@@ -31,16 +31,16 @@ def getAccessToken(wyzeEmail=None, wyzePassword=None):
                 now = datetime.datetime.now()
 
                 timeDifference: datetime = now - dateTimeObj
-                print(f"[WyzeAuth] Debug time diff: {timeDifference} ({timeDifference.total_seconds()} secs), timeout: {WYZE_AUTH_TIMEOUT_SECS}")
+                # print(f"[WyzeAuth] Debug time diff: {timeDifference} ({timeDifference.total_seconds()} secs), timeout: {WYZE_AUTH_TIMEOUT_SECS}")
 
                 if timeDifference.total_seconds() < WYZE_AUTH_TIMEOUT_SECS:
-                    print(f"[WyzeAuth] Access token found on disk for {username} ({fileName})!")
+                    # print(f"[WyzeAuth] Access token found on disk for {username} ({fileName})!")
                     os.environ['WYZE_ACCESS_TOKEN'] = credentials['WYZE_ACCESS_TOKEN']
                     return
-                else:
-                    print(f"[WyzeAuth] Access token expired!")
-    else:
-        print(f"[WyzeAuth] Access token file does not exist!")
+                # else:
+                    # print(f"[WyzeAuth] Access token expired!")
+    # else:
+        # print(f"[WyzeAuth] Access token file does not exist!")
 
     # relogin
     setupWyzeTokens(wyzeEmail=wyzeEmail, wyzePassword=wyzePassword)
@@ -49,9 +49,9 @@ def getAccessToken(wyzeEmail=None, wyzePassword=None):
 
 def setupWyzeTokens(wyzeEmail=None, wyzePassword=None):
     # UUID = uuid.uuid4()
-    print(f"[WyzeAuth] Access token setup, regenerating!!")
+    # print(f"[WyzeAuth] Access token setup, regenerating!!")
     if wyzeEmail is None or wyzePassword is None:
-        print(f"[WyzeAuth] Cannot generate tokens without credentials!")
+        # print(f"[WyzeAuth] Cannot generate tokens without credentials!")
         return
 
     response = Client().login(email=wyzeEmail, password=wyzePassword)

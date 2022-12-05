@@ -20,7 +20,7 @@ getAccessToken(wyzeEmail=email, wyzePassword=password)
 
 clientToken = os.environ.get('WYZE_ACCESS_TOKEN')
 if clientToken is None:
-    print("Token Error!")
+    print(f"Token Error!")
     quit(1)
 
 client = Client(token=os.environ['WYZE_ACCESS_TOKEN'])

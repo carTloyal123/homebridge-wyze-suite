@@ -366,7 +366,7 @@ export class WyzeThermostatAccessory {
 
   async handleGetAllWyzeStates(pythonScriptName = 'getThermostatVariables') {
 
-    this.wyzeLog('Getting all wyze states!');
+    this.wyzeLog(`Getting all wyze states! ${this.platform.config.password}, ${this.username}`);
     const options: Options = {
       mode: 'json',
       pythonOptions: ['-u'], // get print results in real-time
@@ -382,14 +382,14 @@ export class WyzeThermostatAccessory {
 
     pyshell.on('message', (message) => {
       // received a message sent from the Python script (a simple "print" statement)
-      this.wyzeLog(`New message from ${pythonScriptName}:`);
-      this.wyzeLog(message);
+      // this.wyzeLog(`New message from ${pythonScriptName}:`);
+      //  this.wyzeLog(message);
       // parse as JSON here
       try {
         const pythonJson: PythonWyzeStates = message;
         this.currentTemperature = this.far2Cel(pythonJson.temperature);
         this.currentWyzeHeatingCoolingState = Wyze2HomekitStates[pythonJson.system_mode.split('.')[1]];
-        this.wyzeLog(`Current Wyze State: ${this.currentWyzeHeatingCoolingState} for mode ${pythonJson.system_mode}`);
+        // this.wyzeLog(`Current Wyze State: ${this.currentWyzeHeatingCoolingState} for mode ${pythonJson.system_mode}`);
         this.currentCoolingThreshold = this.far2Cel(pythonJson.cooling_setpoint);
         this.currentHeatingThreshold = this.far2Cel(pythonJson.heating_setpoint);
         this.currentTempUnit = Wyze2HomekitUnits[pythonJson.temperature_unit];
@@ -403,9 +403,9 @@ export class WyzeThermostatAccessory {
       }
     });
 
-    pyshell.on('stderr', (stderr) => {
-      this.wyzeLog('Device STDERR: ' + stderr);
-    });
+    // pyshell.on('stderr', (stderr) => {
+    //   // this.wyzeLog('Device STDERR: ' + stderr);
+    // });
 
 
     // end the input stream and allow the process to exit
@@ -489,3 +489,16 @@ export interface PythonWyzeStates {
   heating_setpoint: number;
   temperature_unit: string;
 }
+
+// {
+//   "name": "WyzeSuite",
+//   "username": "carsonloyal123@me.com",
+//   "password": "@Lacylulu123!!!",
+//   "path2py_stubs": "/var/lib/homebridge/node_modules/homebridge-wyze-suite/py_helpers",
+//   "debugLevel": 1,
+//   "deviceDiscoveryTimeout": 30000,
+//   "maximumDiscoveryAttempts": 20,
+//   "refreshIntervalMilliSeconds": 120000,
+//   "newDataTimeout": 30000,
+//   "platform": "WyzeSuitePlatform"
+// }

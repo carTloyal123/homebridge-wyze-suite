@@ -1,6 +1,13 @@
 # Changelog - homebridge-wyze-suite
 
-## [0.7.26] - 2022-12-5
+## [0.7.31] - 2022-12-5
+
+### Changed
+
+- Update authenticationService.py to not output errors, need to to fix this to handle error messages correctly
+
+
+## [0.7.30] - 2022-12-5
 
 ### Changed
 
