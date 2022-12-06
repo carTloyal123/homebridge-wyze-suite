@@ -3,6 +3,9 @@ dist
 
 # ------------- Defaults ------------- #
 
+#tokens
+*.auth.json
+
 # Logs
 logs
 *.log

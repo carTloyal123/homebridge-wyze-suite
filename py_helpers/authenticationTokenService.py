@@ -18,7 +18,7 @@ def getAccessToken(wyzeEmail=None, wyzePassword=None):
     username = wyzeEmail
     unique_id = 'homebridge-wyze-suite-' + username
     UUID = uuid.uuid5(uuid.NAMESPACE_URL, unique_id)
-    fileName = str(UUID) + ".json"
+    fileName = str(UUID) + ".auth.json"
 
     if os.path.exists(fileName):
         with open(fileName, "r") as dataFile:
@@ -80,7 +80,7 @@ def setupWyzeTokens(wyzeEmail=None, wyzePassword=None):
     json_object = json.dumps(data, indent=4)
     
     # Writing to sample.json
-    fileName = str(UUID) + ".json"
+    fileName = str(UUID) + ".auth.json"
     with open(fileName, "w") as outfile:
         outfile.write(json_object)
 
