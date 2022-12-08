@@ -6,6 +6,7 @@ import { Options, PythonShell } from 'python-shell';
 
 
 /* eslint-disable */
+const path = require('node:path');
 /* eslint-enable */
 
 const thermostatAccessory :PlatformAccessory[] = [];
@@ -27,7 +28,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   private retryMax = this.config.maximumDiscoveryAttempts;
   private retryTimeout = this.config.deviceDiscoveryTimeout;
   private directory = process.cwd();
-  private p2stubs = this.directory + '\\py_helpers';
+  private p2stubs = path.join(this.directory, 'py_helpers');
   private wyzeDevicesUpdated = false;
   private retryTimer;
 
@@ -66,6 +67,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     const unknown = 'Unknown';
 
     this.log.info(`Getting Wyze devices for the ${this.retryCount} out of ${this.retryMax} times...`);
+    this.log.info(`Using: ${this.p2stubs}`);
     const options: Options = {
       mode: 'text',
       pythonOptions: ['-u'], // get print results in real-time

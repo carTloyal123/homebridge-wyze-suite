@@ -6,6 +6,7 @@ import {Options, PythonShell} from 'python-shell';
 
 /* eslint-disable */
 const { exec } = require('child_process');
+const path = require('node:path');
 /* eslint-enable */
 
 export class WyzeThermostatAccessory {
@@ -20,7 +21,7 @@ export class WyzeThermostatAccessory {
   private refreshIntervalID;
 
   private directory = process.cwd();
-  private p2stubs = this.directory + '\\py_helpers';
+  private p2stubs = path.join(this.directory, 'py_helpers');
   private username = this.platform.config.username;
 
   private stateOff = this.platform.Characteristic.TargetHeatingCoolingState.OFF;
@@ -94,6 +95,8 @@ export class WyzeThermostatAccessory {
   async runStartup() {
     this.wyzeLog('Running update loop!');
     this.wyzeLog(`Update timeout value: ${this.platform.config.refreshIntervalMilliSeconds}`);
+    this.wyzeLog(`Using: ${this.p2stubs}`);
+
     if (!this.platform.config.refreshIntervalMilliSeconds) {
       this.platform.config.refreshIntervalMilliSeconds = 20000;
     }
