@@ -28,7 +28,8 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   private retryMax = this.config.maximumDiscoveryAttempts;
   private retryTimeout = this.config.deviceDiscoveryTimeout;
   private directory = process.cwd();
-  private p2stubs = path.join(this.directory, 'py_helpers');
+  private pyHelperExtension = path.join('node_modules', 'homebridge-wyze-suite', 'py_helpers');
+  private p2stubs = path.join(this.directory, this.pyHelperExtension);
   private wyzeDevicesUpdated = false;
   private retryTimer;
 

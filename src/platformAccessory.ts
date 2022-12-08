@@ -21,8 +21,8 @@ export class WyzeThermostatAccessory {
   private refreshIntervalID;
 
   private directory = process.cwd();
-  private p2stubs = path.join(this.directory, 'py_helpers');
-  private username = this.platform.config.username;
+  private pyHelperExtension = path.join('node_modules', 'homebridge-wyze-suite', 'py_helpers');
+  private p2stubs = path.join(this.directory, this.pyHelperExtension); private username = this.platform.config.username;
 
   private stateOff = this.platform.Characteristic.TargetHeatingCoolingState.OFF;
   private stateCool = this.platform.Characteristic.TargetHeatingCoolingState.COOL;

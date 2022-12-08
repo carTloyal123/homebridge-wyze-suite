@@ -1,6 +1,12 @@
 # Changelog - homebridge-wyze-suite
 
-## [0.7.36] - 2022-12-7
+## [0.7.39] - 2022-12-8
+
+### Changed
+
+- Update to path calculation for py_helpers
+
+## [0.7.36] - 2022-12-8
 
 ### Changed
 

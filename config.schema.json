@@ -57,10 +57,10 @@
         "title": "RefreshTimeMilliseconds",
         "description": "Specify amount of time in milliseconds between refreshing Wyze Thermostate device data",
         "type": "integer",
-        "default": 120000,
+        "default": 10000,
         "required": true,
         "minimum": 0,
-        "maximum": 3600000
+        "maximum": 30000
       },
       "newDataTimeout": {
         "title": "NewDataTimeout",
