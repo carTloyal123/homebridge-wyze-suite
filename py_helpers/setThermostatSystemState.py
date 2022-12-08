@@ -5,16 +5,7 @@ import wyze_sdk
 from wyze_sdk import Client
 from wyze_sdk.models.devices.thermostats import ThermostatSystemMode
 from wyze_sdk.errors import WyzeApiError
-from authenticationTokenService import getAccessToken
-
-
-def HomekitToWyze(stateNum):
-    match stateNum:
-        case 0: return ThermostatSystemMode.OFF
-        case 1: return ThermostatSystemMode.HEAT
-        case 2: return ThermostatSystemMode.COOL
-        case 3: return ThermostatSystemMode.AUTO
-        case _: return -1
+from authenticationTokenService import getAccessToken, HomekitToWyze
 
 if len(sys.argv) != 5 :
   sys.stdout = sys.stderr
@@ -55,7 +46,7 @@ try:
         quit(1)
 
     thermostat = client.thermostats.info(device_mac=device_mac)
-    client.thermostats.set_system_mode(device_mac=device_mac, device_model="CO_EA1", system_mode=HomekitToWyze(targetSystemState))
+    client.thermostats.set_system_mode(device_mac=device_mac, device_model="CO_EA1", system_mode=targetState)
     print(f"Set target state for: {thermostatNickname} to: {targetState}")
 
     quit(0)

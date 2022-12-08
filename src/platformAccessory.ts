@@ -11,10 +11,8 @@ const path = require('node:path');
 
 export class WyzeThermostatAccessory {
   private service: Service;
-  private isOn = false;
 
   private accLogName = '';
-  private currentStatus = '';
   private wyzeDataUpdated = false;
   private lastWyzeUpdate: Date = new Date();
   private dataTimeout = this.platform.config.newDataTimeout;
@@ -101,6 +99,7 @@ export class WyzeThermostatAccessory {
       this.platform.config.refreshIntervalMilliSeconds = 20000;
     }
     this.handleGetAllWyzeStates(); // get once at startup
+
     this.refreshIntervalID = setInterval(() => {
       this.wyzeDataUpdated = false;
       this.handleGetAllWyzeStates();

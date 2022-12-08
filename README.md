@@ -1,23 +1,16 @@
 # homebridge-wyze-suite
+[![npm](https://img.shields.io/npm/v/homebridge-wyze-suite)](https://www.npmjs.com/package/homebridge-wyze-suite/v/latest)
+[![npm](https://img.shields.io/npm/dt/homebridge-wyze-suite)](https://www.npmjs.com/package/homebridge-wyze-suite)
+[![GitHub last commit](https://img.shields.io/github/last-commit/cartloyal123/homebridge-wyze-suite)](https://github.com/cartloyal123/homebridge-wyze-suite)
 
 This plugin extends the work described below by RMCob using the wyze-sdk to incorporate wyze devices in homebridge. At the moment you can see the list below of projected devices to be supported through this plugin. I am not an expert Typscript or Javascript programmer and welcome any feedback and bug reports as normal. If something breaks I am definitely interested and would like to know so we can fix it. More documentation is in the works as the repo gets fille out more but please check below for an introduction to the repo from RMCob's previous work on the Wyze Robot Vacuum.
 
-- [ ] Wyze Thermostat
+- [-] Wyze Thermostat
 - [ ] Wyze Scale
 
+This plugin adds rudimentary support for the Wyze Thermostat device to [Homebridge](https://github.com/homebridge/homebridge).
 
-
-
-
-# homebridge-wyze-robovac
-[![npm](https://img.shields.io/npm/v/homebridge-wyze-robovac)](https://www.npmjs.com/package/homebridge-wyze-robovac/v/latest)
-[![npm](https://img.shields.io/npm/dt/homebridge-wyze-robovac)](https://www.npmjs.com/package/homebridge-wyze-robovac)
-[![GitHub last commit](https://img.shields.io/github/last-commit/RMCob/homebridge-wyze-robovac)](https://github.com/RMCob/homebridge-wyze-robovac)
-[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-blue)](https://www.paypal.com/donate/?business=G63Z63BWAJWZN&no_recurring=0&currency_code=USD)
-
-This plugin adds rudimentary support for the Wyze Robot Vacuum device to [Homebridge](https://github.com/homebridge/homebridge).
-
+# RMCob's Previous work:
 ## Background
 
 Since HomeKit does not yet have a 'smart vacuum' framework, this plugin creates a separate 'switch' accessory for each room in the current Wyze app map for the vacuum. It also adds an "All Rooms" switch to do the entire map. Turning a switch 'On' will tell the vacuum to sweep that room. Turning it 'Off' will tell the vacuum to stop sweeping and return to the charging dock. In addition, a faux humidity sensor is created to display the vacuum's current battery charge level.
@@ -69,15 +62,15 @@ Use the settings UI in Homebridge Config UI X to configure your Wyze account, or
 {
   "platforms": [
     {
-      "platform": "WyzeRoboVac",
-      "name": "WyzeRoboVac",
+      "platform": "Wyzesuite",
+      "name": "Wyzesuite",
       "username": "YOUR_EMAIL",
       "password": "YOUR_PASSWORD",
       "mfaCode": "YOUR_2FA_AUTHENTICATION_PIN",
       "statusCheckRefreshInterval": "Refresh Interval for status checks after sweeping starts. Default 30 sec",
       "idleBatteryCheckRefreshInterval": "Refresh Interval for battery checks when idle. Default 1800 seconds (30 min)",
       "busyBatteryCheckRefreshInterval": "Refresh Interval for battery checks when busy or charge level < 100. Default 120 seconds (2 min)",
-      "path2py_stubs": "Path to Python helper scripts. Default '/usr/lib/node_modules/homebridge-wyze-robovac/py_helpers'",
+      "path2py_stubs": "Path to Python helper scripts. Default '/usr/lib/node_modules/homebridge-wyze-suite/py_helpers'",
       "debugLevel": "Can be 0 (no logging), 1 (log.info), or 2 (log.debug)"
     }
   ]

@@ -4,6 +4,7 @@ import uuid
 import os
 import json
 import datetime
+from wyze_sdk.models.devices.thermostats import ThermostatSystemMode
 from wyze_sdk import Client 
 
 WYZE_AUTH_TIMEOUT_SECS = 24*60*60
@@ -85,6 +86,14 @@ def setupWyzeTokens(wyzeEmail=None, wyzePassword=None):
         outfile.write(json_object)
 
 
+def HomekitToWyze(stateNum):
+    switch = {
+        0: ThermostatSystemMode.OFF,
+        1: ThermostatSystemMode.HEAT,
+        2: ThermostatSystemMode.COOL,
+        3: ThermostatSystemMode.AUTO
+    }
+    return switch.get(stateNum, -1)
 
 
 

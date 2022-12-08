@@ -116,7 +116,6 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   }
 
   discoverDevices() {
-
     // run python to get devices
     this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
 

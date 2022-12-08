@@ -8,14 +8,6 @@ from wyze_sdk.errors import WyzeApiError
 from authenticationTokenService import getAccessToken
 
 
-def HomekitToWyze(stateNum):
-    match stateNum:
-        case 0: return ThermostatSystemMode.OFF
-        case 1: return ThermostatSystemMode.HEAT
-        case 2: return ThermostatSystemMode.COOL
-        case 3: return ThermostatSystemMode.AUTO
-        case _: return -1
-
 if len(sys.argv) != 5 :
   sys.stdout = sys.stderr
   print(f"USAGE: {sys.argv[0]} wyze_email wyze_password thermostate_nickname target_state")
@@ -34,7 +26,8 @@ if clientToken is None:
     print("Token Error!")
     quit(1)
 
-client = Client(token=os.environ['WYZE_ACCESS_TOKEN'])roboVacNickname = os.sys.argv[3] 
+client = Client(token=os.environ['WYZE_ACCESS_TOKEN'])
+roboVacNickname = os.sys.argv[3] 
 targetSystemState = int(os.sys.argv[4])
 
 for device in client.devices_list():

@@ -8,14 +8,6 @@ from wyze_sdk.errors import WyzeApiError
 from authenticationTokenService import getAccessToken
 
 
-def HomekitToWyze(stateNum):
-    match stateNum:
-        case 0: return ThermostatSystemMode.OFF
-        case 1: return ThermostatSystemMode.HEAT
-        case 2: return ThermostatSystemMode.COOL
-        case 3: return ThermostatSystemMode.AUTO
-        case _: return -1
-
 if len(sys.argv) != 5 :
   sys.stdout = sys.stderr
   print(f"USAGE: {sys.argv[0]} wyze_email wyze_password thermostat_nickname 'target_heating_temperature'")
