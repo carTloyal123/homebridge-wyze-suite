@@ -7,7 +7,10 @@ import { Options, PythonShell } from 'python-shell';
 
 /* eslint-disable */
 const { exec } = require('child_process');
+const { path } = require('path');
 /* eslint-enable */
+
+const directory = process.cwd();
 
 const thermostatAccessory :PlatformAccessory[] = [];
 const nickNames : string[] = [];
@@ -27,7 +30,7 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   private retryCount = 1;
   private retryMax = this.config.maximumDiscoveryAttempts;
   private retryTimeout = this.config.deviceDiscoveryTimeout;
-  private p2stubs = this.config.path2py_stubs;
+  private p2stubs = path.join(directory, 'py_helpers');
   private wyzeDevicesUpdated = false;
   private retryTimer;
 
@@ -60,15 +63,6 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
     }
     // add the restored accessory to the accessories cache so we can track if it has already been registered
     this.accessories.push(accessory);
-  }
-
-  pausecomp(millis) {
-    const date: Date = new Date();
-    let curDate: Date = new Date();
-    do {
-      curDate = new Date();
-    }
-    while(curDate.getTime() - date.getTime() < millis);
   }
 
   handleGetDevicesFromWyze(pythonScriptName = 'getThermostatDeviceList') {
@@ -124,13 +118,16 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
 
   discoverDevices() {
 
-    this.pausecomp(this.retryTimeout);
     // run python to get devices
     this.myLogger(`discoverDevices(): username = '${this.config.username}', password = '${this.config.password}'`);
 
     this.handleGetDevicesFromWyze();
 
-    this.retryTimer = setTimeout(this.retryCallback.bind(this), this.retryTimeout);
+    if (!this.wyzeDevicesUpdated) {
+      this.retryTimer = setTimeout(this.retryCallback.bind(this), this.retryTimeout);
+    } else {
+      this.log.info('Not running device discovery at all!');
+    }
   }
 
   retryCallback() {

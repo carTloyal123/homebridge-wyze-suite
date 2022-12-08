@@ -26,13 +26,6 @@
         "default": "",
         "required": true
       },
-      "path2py_stubs": {
-        "title": "Path to Python helper scripts",
-        "description": "The location where the Python helper scripts are installed",
-        "type": "string",
-        "default": "/var/lib/homebridge/node_modules/homebridge-wyze-suite/py_helpers",
-        "required": true
-      },
       "debugLevel": {
         "title": "Debug Level",
         "description": "Specify the Debug Level. 0 ==> no debug output, 1 ==> debug output to Homebridge logfile, 2 ==> system level logging",

@@ -1,5 +1,12 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.33] - 2022-12-7
+
+### Changed
+
+- Deprecated Python Stubs config option and always getting helpers from node_modules current directory
+- Cleaned up device discovery logic
+
 ## [0.7.31] - 2022-12-5
 
 ### Changed
