@@ -1,5 +1,11 @@
 # Changelog - homebridge-wyze-suite
 
+## [0.7.35] - 2022-12-7
+
+### Changed
+
+- Added auths to npmignore
+
 ## [0.7.33] - 2022-12-7
 
 ### Changed

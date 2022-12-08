@@ -3,6 +3,9 @@ src
 
 # ------------- Defaults ------------- #
 
+# auth
+*.auth.json
+
 # gitHub actions
 .github
 
