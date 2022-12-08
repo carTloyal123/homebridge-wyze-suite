@@ -6,10 +6,7 @@ import {Options, PythonShell} from 'python-shell';
 
 /* eslint-disable */
 const { exec } = require('child_process');
-const { path } = require('path');
 /* eslint-enable */
-
-const directory = process.cwd();
 
 export class WyzeThermostatAccessory {
   private service: Service;
@@ -22,7 +19,8 @@ export class WyzeThermostatAccessory {
   private dataTimeout = this.platform.config.newDataTimeout;
   private refreshIntervalID;
 
-  private p2stubs = path.join(directory, 'py_helpers');
+  private directory = process.cwd();
+  private p2stubs = this.directory + '\\py_helpers';
   private username = this.platform.config.username;
 
   private stateOff = this.platform.Characteristic.TargetHeatingCoolingState.OFF;

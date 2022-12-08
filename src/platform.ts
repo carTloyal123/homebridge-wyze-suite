@@ -6,11 +6,7 @@ import { Options, PythonShell } from 'python-shell';
 
 
 /* eslint-disable */
-const { exec } = require('child_process');
-const { path } = require('path');
 /* eslint-enable */
-
-const directory = process.cwd();
 
 const thermostatAccessory :PlatformAccessory[] = [];
 const nickNames : string[] = [];
@@ -30,10 +26,10 @@ export class WyzeSuitePlatform implements DynamicPlatformPlugin {
   private retryCount = 1;
   private retryMax = this.config.maximumDiscoveryAttempts;
   private retryTimeout = this.config.deviceDiscoveryTimeout;
-  private p2stubs = path.join(directory, 'py_helpers');
+  private directory = process.cwd();
+  private p2stubs = this.directory + '\\py_helpers';
   private wyzeDevicesUpdated = false;
   private retryTimer;
-
 
   constructor(
     public readonly log: Logger,

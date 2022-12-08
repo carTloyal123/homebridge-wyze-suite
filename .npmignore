@@ -3,6 +3,10 @@ src
 
 # ------------- Defaults ------------- #
 
+# dev tools
+publish.sh
+publish_minor.sh
+
 # auth
 *.auth.json
 
