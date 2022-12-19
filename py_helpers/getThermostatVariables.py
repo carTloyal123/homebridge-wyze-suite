@@ -6,6 +6,7 @@ import wyze_sdk
 from wyze_sdk import Client
 from wyze_sdk.errors import WyzeApiError
 from authenticationTokenService import getAccessToken
+wyze_sdk.set_stream_logger('wyze_sdk', level=logging.DEBUG)
 
 if len(sys.argv) != 4 :
     sys.stdout = sys.stderr
@@ -41,8 +42,10 @@ if device_mac == "Not_Set":
 try:
     thermostat_ = client.thermostats.info(device_mac=device_mac)
     from wyze_sdk.models.devices import ThermostatSystemMode
+    print(thermostat_.working_state)
     outputDict = {
         "system_mode": str(thermostat_.system_mode),
+        "working_state": str(thermostat_.working_state),
         "temperature": thermostat_.temperature,
         "cooling_setpoint": thermostat_.cooling_setpoint,
         "heating_setpoint": thermostat_.heating_setpoint,

@@ -28,6 +28,7 @@ export class WyzeThermostatAccessory {
   private stateAuto = this.platform.Characteristic.TargetHeatingCoolingState.AUTO;
 
   private currentWyzeHeatingCoolingState = 3;
+  private currentWyzeWorkingState = 0;
 
   private currentTemperature = 20.5;
 
@@ -282,22 +283,8 @@ export class WyzeThermostatAccessory {
 
     this.processGetUpdate();
 
-    this.wyzeLog(`(${this.deviceNickname}): Get TargetHeatingCoolingState -> ${this.currentWyzeHeatingCoolingState}`);
-
-    // TODO: set characteristics accordingly for each option here to update UI in HK
-    // if auto, calculate current heating or cooling state
-    if (this.currentWyzeHeatingCoolingState === this.platform.Characteristic.TargetHeatingCoolingState.AUTO) {
-      if (this.currentTemperature < this.currentCoolingThreshold && this.currentTemperature > this.currentHeatingThreshold) {
-        return this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
-      } else if (this.currentTemperature > this.currentCoolingThreshold) {
-        return this.platform.Characteristic.CurrentHeatingCoolingState.COOL;
-      } else if (this.currentTemperature < this.currentHeatingThreshold) {
-        return this.platform.Characteristic.CurrentHeatingCoolingState.HEAT;
-      }
-    } else {
-      return this.currentWyzeHeatingCoolingState;
-    }
-    return this.platform.Characteristic.CurrentHeatingCoolingState.OFF;
+    this.wyzeLog(`(${this.deviceNickname}): Get TargetHeatingCoolingState -> ${this.currentWyzeWorkingState}`);
+    return this.currentWyzeWorkingState;
   }
 
   async handleTargetHeatingCoolingStateGet(): Promise<CharacteristicValue> {
@@ -392,7 +379,7 @@ export class WyzeThermostatAccessory {
         const pythonJson: PythonWyzeStates = message;
         this.currentTemperature = this.far2Cel(pythonJson.temperature);
         this.currentWyzeHeatingCoolingState = Wyze2HomekitStates[pythonJson.system_mode.split('.')[1]];
-        // this.wyzeLog(`Current Wyze State: ${this.currentWyzeHeatingCoolingState} for mode ${pythonJson.system_mode}`);
+        this.currentWyzeWorkingState = Wyze2HomekitWorkingStates[pythonJson.working_state];
         this.currentCoolingThreshold = this.far2Cel(pythonJson.cooling_setpoint);
         this.currentHeatingThreshold = this.far2Cel(pythonJson.heating_setpoint);
         this.currentTempUnit = Wyze2HomekitUnits[pythonJson.temperature_unit];
@@ -485,12 +472,19 @@ export enum Wyze2HomekitStates {
   AUTO
 }
 
+export enum Wyze2HomekitWorkingStates {
+  IDLE,
+  HEATING,
+  COOLING
+}
+
 export enum Wyze2HomekitUnits {
   C, F
 }
 
 export interface PythonWyzeStates {
   system_mode: string;
+  working_state: string;
   temperature: number;
   cooling_setpoint: number;
   heating_setpoint: number;
